@@ -6,7 +6,7 @@
             CSC 440 APP
         </div>
     </div>
-</asp:Content>
+</asp:Content> 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
     <div id="xantest" runat="server"></div>

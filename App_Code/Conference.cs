@@ -5,7 +5,7 @@ using System.Web;
 
 /// <summary>
 /// Summary description for Conference
-/// </summary>
+/// </summary> 
 public class Conference
 {
     private String name;

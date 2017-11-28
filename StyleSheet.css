@@ -10,7 +10,7 @@ table{
     border-color: darkgray;
 }
 th {
-    background-color: lightblue;
+    background-color: lightblue; 
     border: solid;
     border-color: darkgray;
     padding: 5px;
