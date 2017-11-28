@@ -1,0 +1,50 @@
+﻿body {
+}
+h3{
+    font-size:30px;
+    color: darkcyan;
+}
+table{
+    border-collapse: collapse; 
+    border: solid;
+    border-color: darkgray;
+}
+th {
+    background-color: lightblue;
+    border: solid;
+    border-color: darkgray;
+    padding: 5px;
+}
+td{
+    border: solid;
+    border-color: darkgray;
+    padding: 5px;
+}
+
+.header {
+    height: 50px;
+    background-color: lightblue;
+    text-align: center;
+    line-height: 50px;
+    font-size: 30px;
+    color: darkcyan;
+    font-weight: bold;   
+    padding: 20px;
+}
+.span{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    text-align: center;
+}
+.nav {
+    height: 40px;
+    background-color: lightgray;
+    border-top: solid;
+    border-top-color: black;
+    border-top-width: 3px;
+    border-bottom: solid;
+    border-bottom-color: black;
+    border-bottom-width: 1px;
+    padding: 10px;
+}
