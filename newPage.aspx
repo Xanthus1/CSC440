@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <div class="header">
         <div class="span">
-            CSC 440 APPP
+            CSC 440 APP
         </div>
     </div>
 </asp:Content> 
