@@ -12,6 +12,6 @@
     <div id="xantest" runat="server"></div>
     Hey
     <div>
-     <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Test" />
+     <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Login" />
     </div>    
 </asp:Content>
