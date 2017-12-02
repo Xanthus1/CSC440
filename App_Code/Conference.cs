@@ -8,42 +8,34 @@ using System.Web;
 /// </summary> 
 public class Conference
 {
+    private int id;
     private String name;
     private String description;
+    private int paperLimit;
+    private String imagePath;
+    private DateTime dateTime;
 
-    public Conference(String name, String description)
+    // Constructor requires all conference info
+    public Conference(int id, String name, String description, int paperLimit, String imagePath, DateTime dateTime)
     {
+        this.id = id;
         this.name = name;
         this.description = description;
+        this.paperLimit = paperLimit;
+        this.imagePath = imagePath;
+        this.dateTime = dateTime;
     }
+
 
     public String getName()
     {
         return name;
     }
-
     public String getDescription()
     {
         return description;
     }
+    // todo: get methods for other vars
 
-    //method to return a list of conferences as a table
-    public static String conferenceTableHtml(List<Conference> confList)
-    {
-        // init table string and set headers
-        string s = "<table>";
-        s += "<tr><th>Name</th><th>Description</th></tr>";
 
-        //load table row
-        foreach(var conf in confList)
-        {
-            s += "<tr><td>" + conf.getName() + "</td><td>" + conf.getDescription() + "</td></tr>";
-        }
-
-        // finish table
-        s+="</table";
-
-        // return string
-        return s;
-    }
 }
