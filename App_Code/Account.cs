@@ -37,7 +37,7 @@ public class Account
         // try to login with credentials
 
         //test
-        if (n.Equals("Admin") && p.Equals("Admin"))
+        if(n.Equals("Admin") && p.Equals("Admin"))
         {
             accessLevel = ACCESS_ADMIN;
         }
@@ -66,7 +66,7 @@ public class Account
     // loads account from current session
     public void loadFromSession()
     {
-        if (HttpContext.Current.Session["name"] != null)
+        if(HttpContext.Current.Session["name"] != null)
         {
             name = HttpContext.Current.Session["name"].ToString();
             userKey = int.Parse(HttpContext.Current.Session["userKey"].ToString());
