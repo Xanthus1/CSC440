@@ -8,9 +8,11 @@
     <link rel="stylesheet" type="text/css" href="StyleSheet.css">
     <style>
     </style> 
-    <asp:ContentPlaceHolder id="head" runat="server">
-    </asp:ContentPlaceHolder>
-</head>
+    <div class="header">
+        <div class="span">
+            CSC 440 APP
+        </div>
+    </div>
     <div class="nav">
         <div class="span" style="width:30%">
             Home
@@ -19,6 +21,10 @@
             About
         </div>
     </div>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+    
 <body>
     <form id="form1" runat="server">
     <div>
