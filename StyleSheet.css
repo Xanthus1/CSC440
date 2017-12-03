@@ -1,6 +1,4 @@
-﻿body {
-}
-h3{
+﻿h3{
     font-size:30px;
     color: darkcyan;
 }
@@ -47,4 +45,6 @@ td{
     border-bottom-color: black;
     border-bottom-width: 1px;
     padding: 10px;
+    font-size: larger;
+    font-weight: bold;
 }

@@ -14,11 +14,14 @@
         </div>
     </div>
     <div class="nav">
-        <div class="span" style="width:30%">
-            Home
+        <div class="span" style="width:33%">
+            <a href="Default.aspx">Home</a>
         </div>
-        <div class="span" style="width:30%">
-            About
+        <div class="span" id="confLink" runat="server" style="width:33%">
+            <a href="Conferences.aspx">Conferences</a>
+        </div>
+        <div class="span" style="width:33%">
+            <a href="Login.aspx">Login</a>
         </div>
     </div>
     <asp:ContentPlaceHolder id="head" runat="server">
@@ -26,12 +29,11 @@
 </head>
     
 <body>
-    <form id="form1" runat="server">
     <div>
         <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
         
         </asp:ContentPlaceHolder>
     </div>
-    </form>
+    
 </body>
 </html>
