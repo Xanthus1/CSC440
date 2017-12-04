@@ -14,9 +14,14 @@ public class Account
     static int ACCESS_GUEST = 1;
     static int ACCESS_USER = 2;
     static int ACCESS_ADMIN = 3;
+    static int USER_NONE = -1;
 
     public Account()
     {
+        // init account with blank credentials
+        name = "Guest";
+        accessLevel = ACCESS_GUEST;
+        userKey = USER_NONE;
     }
 
     public String getName()
