@@ -19,7 +19,7 @@ public class Review
     {
         this.id = id;
         this.paperID = paperID;
-        this.reviewerID = reviwerID;
+        this.reviewerID = reviewerID;
         this.rating = rating;
         this.comment = comment;
         this.privateComment = privateComment;
@@ -29,7 +29,9 @@ public class Review
     {
     }
 
-    public Review[] getReviewsForPaper(int paperID)
+    public List<Review> getReviewsForPaper(int paperID)
     {
+        List<Review> reviewList = new List<Review>();
+        return reviewList;
     }
 }
