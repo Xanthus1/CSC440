@@ -78,6 +78,6 @@ public class Paper
 
     public void viewPaper(int id)
     {
-
+    
     }
 }

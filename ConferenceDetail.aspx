@@ -23,8 +23,15 @@
             <asp:Button ID="btn_reviewpapers" runat="server" OnClick="btn_reviewpapers_Click" Text="Review Papers" />
         </p>
         <p style="text-align: center">
+            <asp:FileUpload id="FileUploadControl" runat="server" />
+        </p>
+        <p style="text-align: center">
             <asp:Button ID="btn_submitpaper" runat="server" OnClick="btn_submitpaper_Click" Text="Submit Paper" />
         </p>
+        <p style="text-align: center">
+            <asp:Label runat="server" id="StatusLabel" text="Upload status: " />
+        </p>
+        
     </form>
 </asp:Content>
 
