@@ -66,6 +66,5 @@ public partial class Conferences : System.Web.UI.Page
         Button btn = (Button)sender;
         Server.Transfer("ConferenceDetail.aspx?ConfID="+btn.Text,true);
         confTable.Visible = false;
-        // todo: pass conference id via form button so detail knows which one to view
     }
 }
