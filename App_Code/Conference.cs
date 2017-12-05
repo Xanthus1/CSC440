@@ -26,7 +26,10 @@ public class Conference
         this.dateTime = dateTime;
     }
 
-
+    public int getId()
+    {
+        return id;
+    }
     public String getName()
     {
         return name;
@@ -35,7 +38,22 @@ public class Conference
     {
         return description;
     }
+    public int getPaperLimit()
+    {
+        return paperLimit;
+    }
+    public String getImagePath()
+    {
+        return imagePath;
+    }
+    public DateTime getDateTime()
+    {
+        return dateTime;
+    }
     // todo: get methods for other vars
 
-
+    public void createConference()
+    {
+        //sql
+    }
 }
