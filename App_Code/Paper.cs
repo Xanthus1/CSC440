@@ -73,12 +73,11 @@ public class Paper
 
         //todo: access database and get list of papers for specific conference
         // need to do a Join to also get the name of the author from the user table
-
         return paperList;
     }
 
     public void viewPaper(int id)
     {
-
+    
     }
 }

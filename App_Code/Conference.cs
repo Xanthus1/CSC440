@@ -28,6 +28,7 @@ public class Conference
         this.dateTime = dateTime;
     }
 
+
     // blank constructor
     public Conference()
     {
@@ -38,7 +39,6 @@ public class Conference
         this.imagePath = "IMAGEPATH_NONE";
         this.dateTime = DateTime.Today;
     }
-
 
     public String getName()
     {
@@ -52,6 +52,18 @@ public class Conference
     public int getID()
     {
         return id;
+    }
+    public int getPaperLimit()
+    {
+        return paperLimit;
+    }
+    public String getImagePath()
+    {
+        return imagePath;
+    }
+    public DateTime getDateTime()
+    {
+        return dateTime;
     }
     
     // get conference from table using key id
@@ -101,5 +113,8 @@ public class Conference
         
     }
 
-
+    public void createConference()
+    {
+        //sql
+    }
 }

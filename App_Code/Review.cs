@@ -25,10 +25,35 @@ public class Review
         this.privateComment = privateComment;
     }
 
-    public void submitReview()
+    public int getID()
     {
+        return id;
     }
-
+    public int getPaperID()
+    {
+        return paperID;
+    }
+    public int getReviewerID()
+    {
+        return reviewerID;
+    }
+    public string getRating()
+    {
+        return rating;
+    }
+    public string getComment()
+    {
+        return comment;
+    }
+    public string getPrivateComment()
+    {
+        return privateComment;
+    }
+    public void submitReview(int id, int paperID, int reviewerID, string rating, string comment, string privateComment)
+    {
+        Review r = new Review(id, paperID, reviewerID, rating, comment, privateComment);
+        //sql command to upload review
+    }
     public List<Review> getReviewsForPaper(int paperID)
     {
         List<Review> reviewList = new List<Review>();
