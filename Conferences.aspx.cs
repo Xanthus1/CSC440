@@ -39,7 +39,7 @@ public partial class Conferences : System.Web.UI.Page
             btn.Click += btn_View_Click;
             td.Controls.Add(btn);
             tr.Cells.Add(td);
-
+            
             // Name
             td = new TableCell();
             td.Text = c.getName();
@@ -63,7 +63,8 @@ public partial class Conferences : System.Web.UI.Page
 
     protected void btn_View_Click(object sender, EventArgs e)
     {
-        Server.Transfer("ConferenceDetail.aspx");
+        Button btn = (Button)sender;
+        Server.Transfer("ConferenceDetail.aspx?ConfID="+btn.Text,true);
         confTable.Visible = false;
         // todo: pass conference id via form button so detail knows which one to view
     }

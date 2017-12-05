@@ -50,6 +50,17 @@ public partial class Register : System.Web.UI.Page
             valid = false;
         }
 
+        // password length must be at least 6 chars
+        if (tb_password.Text.Length < 6)
+        {
+            warning += "Password needs to be at least 6 characters<p>";
+
+            tb_password.BackColor = System.Drawing.Color.Red;
+            tb_passwordconfirm.BackColor = System.Drawing.Color.Red;
+
+            valid = false;
+        }
+
         //todo: test if email is already registered
 
 
