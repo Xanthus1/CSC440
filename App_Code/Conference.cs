@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -26,6 +28,17 @@ public class Conference
         this.dateTime = dateTime;
     }
 
+    // blank constructor
+    public Conference()
+    {
+        this.id = -1;
+        this.name = "CONFERENCE_NONE";
+        this.description = "DESCRIPTION_NONE";
+        this.paperLimit = -1;
+        this.imagePath = "IMAGEPATH_NONE";
+        this.dateTime = DateTime.Today;
+    }
+
 
     public String getName()
     {
@@ -35,7 +48,58 @@ public class Conference
     {
         return description;
     }
-    // todo: get methods for other vars
+
+    public int getID()
+    {
+        return id;
+    }
+    
+    // get conference from table using key id
+    static public Conference getConference(int id)
+    {
+        Conference conf = new Conference(); // blank conference object : gets rewritten with sql select
+
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM conference WHERE ID=" + id,"root","");
+
+        foreach (DataRow row in myTable.Rows)
+        {
+            conf = new Conference(Int32.Parse(row["ID"].ToString()),
+                row["name"].ToString(),
+                row["description"].ToString(),
+                Int32.Parse(row["paperLimit"].ToString()),
+                row["imagePath"].ToString(),
+                DateTime.Parse(row["dateTime"].ToString()) // todo: might need to convert SQL DateTime to this datetime class
+                );
+        }
+
+        return conf;
+    }
+
+    static public List<Conference> getConferenceList()
+    {
+        List<Conference> confList = new List<Conference>();
+
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM conference", "root", "");
+
+        // convert retrieved data to Conference objects and add them to the list
+        foreach (DataRow row in myTable.Rows)
+        {
+                
+            Conference conf = new Conference(Int32.Parse(row["ID"].ToString()),
+                row["name"].ToString(),
+                row["description"].ToString(),
+                Int32.Parse(row["paperLimit"].ToString()),
+                row["imagePath"].ToString(),
+                DateTime.Parse(row["dateTime"].ToString()) // todo: might need to convert SQL DateTime to this datetime class
+                );
+                   
+            confList.Add(conf);
+        }
+
+
+        return confList;
+        
+    }
 
 
 }
