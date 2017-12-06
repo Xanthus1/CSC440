@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="AddConference.aspx.cs" Inherits="AddConference" %>
-
+<%@ Register Assembly="TimePicker" Namespace="MKB.TimePicker" TagPrefix="mkb"%>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -10,20 +10,20 @@
         <tr>
             <td style="width: 181px; text-align: center">Conference Name</td>
             <td style="width: 451px">
-                <asp:TextBox ID="con_name" runat="server" AutoPostBack="true" Height="16px" Width="444px"></asp:TextBox>
+                <asp:TextBox ID="con_name" runat="server" AutoPostBack="false" Height="16px" Width="444px"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td style="width: 181px; text-align: center; height: 157px;">Conference Description</td>
             <td style="width: 451px; height: 157px;">
-                <asp:TextBox ID="con_desc" runat="server" AutoPostBack="true" Height="137px" Width="481px"></asp:TextBox>
+                <asp:TextBox ID="con_desc" runat="server" AutoPostBack="false" Height="137px" Width="481px"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td style="width: 181px; text-align: center">Maximum Paper Submissions</td>
             <td style="width: 451px">
 
-                <asp:TextBox ID="max_papers" runat="server" AutoPostBack="true" Height="16px" Width="75px"></asp:TextBox>
+                <asp:TextBox ID="max_papers" runat="server" AutoPostBack="false" Height="16px" Width="75px"></asp:TextBox>
 
             </td>
         </tr>
@@ -40,7 +40,13 @@
                </asp:Calendar>
                </div>
            <div style="text-align: center">
-               Selected Date:<br />
+               <br />
+               <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+               <div style="width:153px; margin-left:auto;margin-right:auto"> 
+                    <mkb:TimeSelector ID="time_selector" runat="server" SelectedTimeFormat="TwentyFour"></mkb:TimeSelector>
+               </div>
+               <br />
+               Selected Date/Time:<br />
                 <asp:TextBox ID="selected_date" runat="server" AutoPostBack="true" Height="16px" Width="227px"></asp:TextBox>
                <br />
                <br />
