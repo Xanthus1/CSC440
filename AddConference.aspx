@@ -10,19 +10,19 @@
         <tr>
             <td style="width: 181px; text-align: center">Conference Name</td>
             <td style="width: 451px">
-                <asp:TextBox ID="con_name" runat="server"  OnTextChanged="tb_TextChanged" AutoPostBack="true" Height="16px" Width="432px"></asp:TextBox>
+                <asp:TextBox ID="con_name" runat="server" Height="16px" Width="432px"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td style="width: 181px; text-align: center; height: 157px;">Conference Description</td>
             <td style="width: 451px; height: 157px;">
-                <asp:TextBox ID="con_desc" runat="server"  OnTextChanged="tb_TextChanged" AutoPostBack="true" Height="137px" Width="433px"></asp:TextBox>
+                <asp:TextBox ID="con_desc" runat="server" Height="137px" Width="433px"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td style="width: 181px; text-align: center">Maximum Paper Submissions</td>
             <td style="width: 451px">
-                <asp:TextBox ID="max_papers" runat="server"  OnTextChanged="tb_TextChanged" AutoPostBack="true" Height="16px" Width="46px"></asp:TextBox>
+                <asp:TextBox ID="max_papers" runat="server" Height="16px" Width="46px"></asp:TextBox>
             </td>
         </tr>
         </table>
