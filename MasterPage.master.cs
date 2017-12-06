@@ -9,14 +9,25 @@ public partial class MasterPage : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Account account = new Account();
-
-        account.sessionUpdate();
-
-        if (account.getAccessLevel() == 2)
+        if (HttpContext.Current.Session["name"] == null)
         {
-            confLink.InnerHtml = "";
+            // no current session, initialize session as guest
+            Account.setGuestSession();
         }
+
+        // if guest, hide the conferences button
+        if(HttpContext.Current.Session["accessLevel"].ToString() == ""+Account.ACCESS_GUEST)
+        {
+            confLink.Visible = false;
+        }
+        else
+        {
+            // if you're a logged in user, show Logout instead of login
+            loginDiv.InnerHtml =  "<a href='Logout.aspx'> Logout </a>";
+        }
+
+        //update welcome text
+        welcomeDiv.InnerHtml = "Welcome     " + HttpContext.Current.Session["name"].ToString() + "!";
     }
 
 

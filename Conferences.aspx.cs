@@ -15,6 +15,21 @@ public partial class Conferences : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        // init guest settings if session doesn't exist
+        if (HttpContext.Current.Session["name"] == null)
+        {
+            // no current session, initialize session as guest
+            Account.setGuestSession();
+        }
+        // Guests don't have access to conferences: show error
+        if (HttpContext.Current.Session["accesslevel"].ToString().Equals(""+Account.ACCESS_GUEST))
+        {
+            // todo: show error message
+            form1.InnerHtml = "<b> Error: Login with your account to access the conferences page</b>";
+            return;
+        }
+
+        // Get list of conferences from database
         confList = Conference.getConferenceList();
 
         // this function uses conference list to update the table on the page
