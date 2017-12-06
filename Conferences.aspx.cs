@@ -21,10 +21,9 @@ public partial class Conferences : System.Web.UI.Page
             // no current session, initialize session as guest
             Account.setGuestSession();
         }
-        // Guests don't have access to conferences: show error
+        // Guests don't have access to conferences: show error and stop loading page
         if (HttpContext.Current.Session["accesslevel"].ToString().Equals(""+Account.ACCESS_GUEST))
         {
-            // todo: show error message
             form1.InnerHtml = "<b> Error: Login with your account to access the conferences page</b>";
             return;
         }

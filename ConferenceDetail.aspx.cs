@@ -9,14 +9,24 @@ using System.Web.UI.WebControls;
 public partial class ConferenceDetail : System.Web.UI.Page
 {
     static String IMAGE_RESOURCE_PATH = "/papers";
+    Conference conf; // store conference loaded on this page
+    Registration registration; // store registration details (whether checked in or registered or not)
+        
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        Conference conf;
-        // based on privelege and/or whether you have a paper for this conference
-        // hide buttons as necessary (Register, Submit paper, View paper and Comments, Review papers)
-        // todo: query based on registration access (reviewer or not)
-
+        // init guest settings if session doesn't exist
+        if (HttpContext.Current.Session["name"] == null)
+        {
+            // no current session, initialize session as guest
+            Account.setGuestSession();
+        }
+        // Guests don't have access to conferences: show error and stop loading page
+        if (HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_GUEST))
+        {
+            form1.InnerHtml = "<b> Error: Login with your account to access the Conference details page</b>";
+            return;
+        }
 
         //Get Current conference from previous form
         if (Request.QueryString["ConfID"] == null)
@@ -35,6 +45,15 @@ public partial class ConferenceDetail : System.Web.UI.Page
             lbl_description.Text = conf.getDescription();
             lbl_datetime.Text = conf.getDateTime().ToString();
         }
+
+        // get Registration info / init registration object
+        int userID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
+        int confID = conf.getID();
+        registration = new Registration(userID,confID);
+
+
+        //hide buttons based on registration / checked in status / privilege
+        refreshPageVisibleControls();
 
     }
 
@@ -56,7 +75,67 @@ public partial class ConferenceDetail : System.Web.UI.Page
 
     protected void btn_checkin_Click(object sender, EventArgs e)
     {
+        registration.checkIn();
+    }
 
+    protected void btn_register_Click(object sender, EventArgs e)
+    {
+        // depending on which button was pressed, set the privilege level
+        Button btn = (Button)sender;
+
+        if (btn.ID.Equals("btn_register_researcher"))
+        {
+            registration.setPrivilege(Registration.ACCESS_RESEARCHER);
+        }
+        else
+        {
+            registration.setPrivilege(Registration.ACCESS_REVIEWER);
+        }
+
+        // use registration object to register, adding registration to DB
+        registration.register();
+
+        // change visibility of controls based on registration / privilege
+        refreshPageVisibleControls();
+
+    }
+
+    // refreshes the controls visible on the page based on registration status and privilege
+    protected void refreshPageVisibleControls()
+    {
+        //todo: Handeling revewing papers and viewing your own paper
+
+        // if you're already registered, don't show register buttons
+        if (registration.isRegistered())
+        {
+            btn_register_researcher.Visible = false;
+            btn_register_reviewer.Visible = false;
+
+            // if you're not registered, you can't submit a paper
+            // todo: only show if you haven't yet uploaded a paper
+            StatusLabel.Visible = true;
+            FileUploadControl.Visible = true;
+            btn_submitpaper.Visible = true;
+
+            // if already checked in , hide checkin button
+            if (registration.isCheckedIn())
+            {
+                btn_checkin.Visible = false;
+            }
+
+        }
+        else
+        {
+            // if you're not registered, you can't submit a paper or checkin
+            StatusLabel.Visible = false;
+            FileUploadControl.Visible = false;
+            btn_submitpaper.Visible = false;
+
+            // not registered, can't check in
+            btn_checkin.Visible = false;
+        }
+
+        
     }
 
     protected void btn_submitpaper_Click(object sender, EventArgs e)
