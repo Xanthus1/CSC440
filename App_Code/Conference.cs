@@ -116,7 +116,7 @@ public class Conference
         
     }
 
-    public void createConference()
+    public void createConference(string cName, string cDesc, int paperMax)
     {
         //sql
     }
