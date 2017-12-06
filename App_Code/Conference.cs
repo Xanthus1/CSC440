@@ -113,7 +113,7 @@ public class Conference
         
     }
 
-    public void createConference(string cName, string cDesc, int paperMax)
+    public void createConference(string cName, string cDesc, int pMax, DateTime dTime)
     {
         //sql
     }
