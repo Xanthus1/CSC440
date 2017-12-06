@@ -21,6 +21,11 @@ public partial class AddConference : System.Web.UI.Page
         {
             maxPapers = Int32.Parse(max_papers.Text);
         }
+        else
+        {
+            max_papers.Text = "100";
+            StatusLabel.Text = "Max Paper input was invalid, default is set to 100.";
+        }
         if (maxPapers > 1000)
         {
             maxPapers = 1000;
@@ -37,7 +42,25 @@ public partial class AddConference : System.Web.UI.Page
         else
         {
             Conference conf = new Conference();
-            conf.createConference(con_name.Text,con_desc.Text,maxPapers);
+            try
+            {
+                conf.createConference(con_name.Text, con_desc.Text, maxPapers, datepicker.SelectedDate);
+                StatusLabel.Text = "Conference Add Successful!";
+                con_desc.Text = "";
+                max_papers.Text = "";
+                con_name.Text = "";
+                selected_date.Text = "";
+                datepicker.SelectedDate = DateTime.MinValue;
+            }
+            catch
+            {
+
+            }
         }
+    }
+
+    protected void datepicker_SelectionChanged(object sender, EventArgs e)
+    {
+        selected_date.Text = datepicker.SelectedDate.ToShortDateString();
     }
 }

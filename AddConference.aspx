@@ -10,23 +10,35 @@
         <tr>
             <td style="width: 181px; text-align: center">Conference Name</td>
             <td style="width: 451px">
-                <asp:TextBox ID="con_name" runat="server" Height="16px" Width="432px"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td style="width: 181px; text-align: center; height: 157px;">Conference Description</td>
             <td style="width: 451px; height: 157px;">
-                <asp:TextBox ID="con_desc" runat="server" Height="137px" Width="433px"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td style="width: 181px; text-align: center">Maximum Paper Submissions</td>
             <td style="width: 451px">
-                <asp:TextBox ID="max_papers" runat="server" Height="16px" Width="46px"></asp:TextBox>
+
             </td>
         </tr>
         </table>
+           <br />
+           <div style="width:475px;margin-left:auto;margin-right:auto"> 
+           <asp:Calendar ID ="datepicker" runat="server" Height="190px" Width="475px" BackColor="White" BorderColor="White" BorderWidth="1px" Font-Names="Verdana" Font-Size="9pt" ForeColor="Black" NextPrevFormat="FullMonth" OnSelectionChanged="datepicker_SelectionChanged">
+               <DayHeaderStyle Font-Bold="True" Font-Size="8pt" />
+               <NextPrevStyle Font-Bold="True" Font-Size="8pt" ForeColor="#333333" VerticalAlign="Bottom" />
+               <OtherMonthDayStyle ForeColor="#999999" />
+               <SelectedDayStyle BackColor="#333399" ForeColor="White" />
+               <TitleStyle BackColor="White" BorderColor="Black" BorderWidth="4px" Font-Bold="True" Font-Size="12pt" ForeColor="#333399" />
+               <TodayDayStyle BackColor="#CCCCCC" />
+               </asp:Calendar>
+               </div>
            <div style="text-align: center">
+               Selected Date:<br />
+                <asp:TextBox ID="selected_date" runat="server" AutoPostBack="true" Height="16px" Width="227px"></asp:TextBox>
+               <br />
                <br />
                Upload an Image for This Conference<p style="text-align: center">
                    <asp:FileUpload ID="FileUploadControl" runat="server" />
