@@ -3,5 +3,5 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <div id="confContent" runat="server"> No Conferences!</div>
+    <div id="confContent" runat="server"> <h1> Home Page!</h1><p>Upcoming Conference info will be displayed here</p></div>
 </asp:Content>

@@ -39,15 +39,21 @@ public partial class Login : System.Web.UI.Page
 
         if (valid)
         {
-            //todo: logging in
+            if(Account.login(tb_email.Text, tb_password.Text))
+            {
+                Server.Transfer("Default.aspx");
+            }
+            else
+            {
+                warning += "Login Failed<p>";
+                warningDiv.InnerHtml = warning;
+            }
 
-            Server.Transfer("Default.aspx");
         }
         else
         {
             warningDiv.InnerHtml = warning;
-        }
-        
+        }        
         
     }
 

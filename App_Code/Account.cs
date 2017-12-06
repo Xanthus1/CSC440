@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -11,10 +12,10 @@ public class Account
     private String name;
     private int userKey; // key relating to user in database
     private int accessLevel;
-    static int ACCESS_GUEST = 1;
-    static int ACCESS_USER = 2;
-    static int ACCESS_ADMIN = 3;
-    static int USER_NONE = -1;
+    public static int ACCESS_GUEST = 1;
+    public static int ACCESS_USER = 2;
+    public static int ACCESS_ADMIN = 3;
+    public static int USER_NONE = -1;
 
     public Account()
     {
@@ -35,38 +36,55 @@ public class Account
     }
 
     // return 
-    public Boolean login(String n, String p)
+    static public Boolean login(String e, String p)
     {
         //access database
 
-        // try to login with credentials
+        // try to login with credentials  
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM user WHERE email='"+e+"' AND password='" + p + "'",
+            "root","");
 
-        //test
-        if(n.Equals("Admin") && p.Equals("Admin"))
+        // if there is no result, fail login.
+        if (myTable.Rows.Count == 0)
         {
-            accessLevel = ACCESS_ADMIN;
+            return false;
         }
-        else
-        {
-            accessLevel = ACCESS_USER;
-        }
-        name = n;
-        userKey = 1;
-
 
         // update session after logging in ( stay logged in when navigating )
-        sessionUpdate();
+        DataRow row = myTable.Rows[0];
+        HttpContext.Current.Session["name"] = row["name"].ToString();
+        HttpContext.Current.Session["userKey"] = row["id"].ToString();
+        HttpContext.Current.Session["accessLevel"] = row["accesslevel"].ToString();
 
-        // return whether login successful, set accesslevel
+        // return whether login successful
         return true;
     }
 
-    // attempts to register account
-    // todo: more parameters
-    public void register(String n, String p)
+    // Register account
+    // call only after validation has been completed
+    static public void register(String e, String n, String p)
     {
-        //validate that name is not taken
+        // insert new user into table (id is autoincrement)
+        //        INSERT INTO user (email, password, accesslevel, name) VALUES("email", "pass", 1, "name")
+
+        DBHelper.insertQuery("INSERT INTO user (email,password,accesslevel,name) VALUES ('" 
+            + e + "','" + p + "'," + ACCESS_USER + ",'" + n + "')", "root", "");
     }
+
+    static public Boolean isEmailTaken(String e)
+    {
+        // validate that e-mail has not registered
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM user WHERE email='" + e + "'", "root", "");
+
+        // account is not taken
+        if (myTable.Rows.Count > 0 )
+        {
+            return true;
+        }
+        return false;
+    }
+
+    
 
     // loads account from current session
     public void loadFromSession()
@@ -85,10 +103,11 @@ public class Account
     }
 
     //  uses class information and stores it to your session
-    public void sessionUpdate()
+    public static void setGuestSession()
     {
-        HttpContext.Current.Session["name"] = name;
-        HttpContext.Current.Session["userKey"] = userKey;
-        HttpContext.Current.Session["accessLevel"] = accessLevel;
+        // no session active, set session name to guest 
+        HttpContext.Current.Session["name"] = "Guest";
+        HttpContext.Current.Session["userKey"] = Account.USER_NONE;
+        HttpContext.Current.Session["accessLevel"] = Account.ACCESS_GUEST;
     }
 }

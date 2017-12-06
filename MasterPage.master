@@ -12,6 +12,13 @@
         <div class="span">
             CSC 440 APP
         </div>
+        <div>
+            <div class="span" style="width:33%"></div>
+            <div class="span" style="width:33%"></div>
+            <div class="welcome span" id="welcomeDiv" runat="server">
+                Welcome Guest!
+            </div>
+        </div>
     </div>
     <div class="nav">
         <div class="span" style="width:33%">
@@ -20,7 +27,7 @@
         <div class="span" id="confLink" runat="server" style="width:33%">
             <a href="Conferences.aspx">Conferences</a>
         </div>
-        <div class="span" style="width:33%">
+        <div class="span" id="loginDiv" runat="server" style="width:33%">
             <a href="Login.aspx">Login</a>
         </div>
     </div>
@@ -31,6 +38,9 @@
 <body>
     <div>
         <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+            <p>
+            </p>
         
         </asp:ContentPlaceHolder>
     </div>
