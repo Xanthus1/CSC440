@@ -12,16 +12,18 @@ public class Registration
     private int userID;
     private int confID;
     private int privilege;
+    private Boolean checkedIn;
     static int ACCESS_RESEARCHER = 1;
     static int ACCESS_APPLY_FOR_REVIEWER = 2;
     static int ACCESS_REVIEWER = 3;
 
-    public Registration(int id, int userID, int confID, int privilege)
+    public Registration(int id, int userID, int confID, int privilege, Boolean checkedIn)
     {
         this.id = id;
         this.userID = userID;
         this.confID = confID;
         this.privilege = privilege;
+        this.checkedIn = checkedIn;
     }
     public int getID()
     {
@@ -41,7 +43,14 @@ public class Registration
     {
         return privilege;
     }
-
+    public Boolean getCheckedIn()
+    {
+        return checkedIn;
+    }
+    public void checkIn(int rID)
+    {
+        //given registration ID, set the check in to True.
+    }
     public void register(int uID, int cID)
     {
         //need to consider autoincrement.
