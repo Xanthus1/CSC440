@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 public partial class ConferenceDetail : System.Web.UI.Page
 {
-    static String IMAGE_RESOURCE_PATH = "/papers";
+    static String IMAGE_RESOURCE_PATH = "/papers"; // todo: is this used or needed?
     Conference conf; // store conference loaded on this page
     Registration registration; // store registration details (whether checked in or registered or not)
         
@@ -64,10 +64,14 @@ public partial class ConferenceDetail : System.Web.UI.Page
 
     protected void btn_viewpaper_Click(object sender, EventArgs e)
     {
-        //works for test file, have to get paths from sql
-        byte[] Content = File.ReadAllBytes(Path.Combine(Server.MapPath("~/Papers/") + "/" + "cmdb_documentation.docx"));
+        //pull paper from Paper folder based on filename in DB
+        int confID = conf.getID();
+        int authorID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
+        String docPath = Paper.getPaperPath(authorID,confID); // docpath is currently just filename
+
+        byte[] Content = File.ReadAllBytes(Path.Combine(Server.MapPath("~/Papers/") + "/" + docPath));
         Response.ContentType = "text/docx";
-        Response.AddHeader("content-disposition", "attachment; filename=" + "cmdb_documentation" + ".docx");
+        Response.AddHeader("content-disposition", "attachment; filename=" + docPath); // docpath is currently just filename
         Response.BufferOutput = true;
         Response.OutputStream.Write(Content, 0, Content.Length);
         Response.End();
@@ -103,7 +107,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
     // refreshes the controls visible on the page based on registration status and privilege
     protected void refreshPageVisibleControls()
     {
-        //todo: Handeling revewing papers and viewing your own paper
+        //todo: Handeling viewing your own paper
 
         // if you're already registered, don't show register buttons
         if (registration.isRegistered())
@@ -111,11 +115,22 @@ public partial class ConferenceDetail : System.Web.UI.Page
             btn_register_researcher.Visible = false;
             btn_register_reviewer.Visible = false;
 
-            // if you're not registered, you can't submit a paper
-            // todo: only show if you haven't yet uploaded a paper
-            StatusLabel.Visible = true;
-            FileUploadControl.Visible = true;
-            btn_submitpaper.Visible = true;
+            // if you're registered, check if you've submitted a paper
+            // if you have, hide the paper submittal
+            int authorID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
+            int confID = conf.getID();
+
+            if (Paper.hasSubmitted(authorID, confID))
+            {
+                StatusLabel.Visible = false;
+                FileUploadControl.Visible = false;
+                btn_submitpaper.Visible = false;
+            }
+            else
+            {
+                StatusLabel.Visible = false;
+            }
+            
 
             // if already checked in , hide checkin button
             if (registration.isCheckedIn())
@@ -152,6 +167,12 @@ public partial class ConferenceDetail : System.Web.UI.Page
                 {
                     FileUploadControl.SaveAs(Path.Combine(Server.MapPath("~/Papers/") + "/" + fileName));
                     StatusLabel.Text = "Upload status: File uploaded!";
+
+                    int authorID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
+                    int confID = conf.getID();
+                    String title = lbl_Title.Text;
+                    
+                    Paper.submitPaper(authorID, confID, title, fileName); // currently works just using filename, all papers in /papers/ directory
                 }
                 else
                 {
