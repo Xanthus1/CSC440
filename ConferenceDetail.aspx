@@ -10,7 +10,7 @@
             <asp:Label ID="lbl_datetime" runat="server" Text="[ Date / Time ]"></asp:Label>
         </p>
         <p style="text-align: center">
-            <asp:Image ID="img_conf" runat="server" Height="98px" Width="117px" />
+            <asp:Image ID="img_conf" runat="server" Height="202px" Width="298px" />
         </p>
         <p style="text-align: center">
             <asp:Button ID="btn_checkin" runat="server" OnClick="btn_checkin_Click" Text="Check In" />
