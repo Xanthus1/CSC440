@@ -33,7 +33,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
             conf = Conference.getConference(id);
             lbl_Title.Text = conf.getName();
             lbl_description.Text = conf.getDescription();
-            //todo: get dateTime
+            lbl_datetime.Text = conf.getDateTime().ToString();
         }
 
     }

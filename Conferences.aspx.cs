@@ -65,9 +65,8 @@ public partial class Conferences : System.Web.UI.Page
             tr.Cells.Add(td);
 
             // date 
-            //todo: use function
             td = new TableCell();
-            td.Text = "" + DateTime.Today;
+            td.Text = c.getDateTime().ToString();
             tr.Cells.Add(td);
 
             confTable.Rows.Add(tr);
