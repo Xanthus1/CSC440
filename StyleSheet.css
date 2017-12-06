@@ -4,8 +4,8 @@
 }
 table{
     border-collapse: collapse; 
-    border: solid;
-    border-color: darkgray;
+    border: medium solid darkgray;
+    height: 98px;
 }
 th {
     background-color: lightblue; 
