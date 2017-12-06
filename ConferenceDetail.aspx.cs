@@ -150,8 +150,9 @@ public partial class ConferenceDetail : System.Web.UI.Page
 
                 if (extension.Equals(".docx", StringComparison.OrdinalIgnoreCase))
                 {
-                    FileUploadControl.SaveAs(Path.Combine(Server.MapPath("~/Papers/") + "/" + fileName));
-                    StatusLabel.Text = "Upload status: File uploaded!";
+                    String path = Path.Combine(Server.MapPath("~/Papers/") + fileName);
+                    FileUploadControl.SaveAs(path);
+                    StatusLabel.Text = "Upload status: File uploaded to "+path;
                 }
                 else
                 {

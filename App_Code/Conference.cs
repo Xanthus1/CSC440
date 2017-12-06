@@ -116,8 +116,10 @@ public class Conference
         
     }
 
-    public void createConference(string cName, string cDesc, int pMax, DateTime dTime)
+    public void createConference(string cName, string cDesc, int pMax, string iPath, DateTime dTime)
     {
-        //sql
+        String date_time = dTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        //need to add image path
+        DBHelper.insertQuery("Insert Into conference (`Name`, `Description`, `PaperLimit`, `ImagePath`, `DateTime`) VALUES ('"+cName+"', '"+cDesc+"', "+pMax+", '"+iPath+"', '"+date_time+"')", "root","");
     }
 }
