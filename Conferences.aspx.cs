@@ -15,6 +15,20 @@ public partial class Conferences : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        // init guest settings if session doesn't exist
+        if (HttpContext.Current.Session["name"] == null)
+        {
+            // no current session, initialize session as guest
+            Account.setGuestSession();
+        }
+        // Guests don't have access to conferences: show error and stop loading page
+        if (HttpContext.Current.Session["accesslevel"].ToString().Equals(""+Account.ACCESS_GUEST))
+        {
+            form1.InnerHtml = "<b> Error: Login with your account to access the conferences page</b>";
+            return;
+        }
+
+        // Get list of conferences from database
         confList = Conference.getConferenceList();
 
         // this function uses conference list to update the table on the page
@@ -50,9 +64,8 @@ public partial class Conferences : System.Web.UI.Page
             tr.Cells.Add(td);
 
             // date 
-            //todo: use function
             td = new TableCell();
-            td.Text = "" + DateTime.Today;
+            td.Text = c.getDateTime().ToString();
             tr.Cells.Add(td);
 
             confTable.Rows.Add(tr);

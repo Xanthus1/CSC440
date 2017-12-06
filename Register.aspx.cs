@@ -12,7 +12,7 @@ public partial class Register : System.Web.UI.Page
     Account account;
     protected void Page_Load(object sender, EventArgs e)
     {
-        account = new Account();
+        
     }
 
     //clicking submit  to register new account
@@ -61,12 +61,21 @@ public partial class Register : System.Web.UI.Page
             valid = false;
         }
 
-        //todo: test if email is already registered
+        //test if email is already registered
+        if (Account.isEmailTaken(tb_email.Text))
+        {
+            warning += "E-mail has already been taken";
+
+            tb_email.BackColor = System.Drawing.Color.Red;
+
+            valid = false;
+        }
 
 
         if (valid)
         {
-            // todo: create account and navigate to login page
+            // create account and navigate to login page
+            Account.register(tb_email.Text, tb_name.Text, tb_password.Text);
 
             Server.Transfer("Default.aspx");
         }

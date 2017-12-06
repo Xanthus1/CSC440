@@ -19,15 +19,21 @@ td{
     padding: 5px;
 }
 
+.welcome{
+    height: 12px;
+    font-size: 12px;
+    padding-right: 50px;
+}
+
 .header {
-    height: 50px;
+    height: 70px;
     background-color: lightblue;
     text-align: center;
     line-height: 50px;
     font-size: 30px;
     color: darkcyan;
     font-weight: bold;   
-    padding: 20px;
+    padding-bottom: 20px;
 }
 .span{
     display: inline-block;

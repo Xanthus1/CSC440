@@ -14,6 +14,10 @@
         </p>
         <p style="text-align: center">
             <asp:Button ID="btn_checkin" runat="server" OnClick="btn_checkin_Click" Text="Check In" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <asp:Button ID="btn_register_researcher" runat="server" OnClick="btn_register_Click" Text="Register As Researcher" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <asp:Button ID="btn_register_reviewer" runat="server" OnClick="btn_register_Click" Text="Register As Reviewer" />
         </p>
         <p style="text-align: center">
 &nbsp;<asp:Label ID="lbl_description" runat="server" Text="[ Description ]"></asp:Label>

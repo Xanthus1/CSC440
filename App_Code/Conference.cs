@@ -73,8 +73,10 @@ public class Conference
 
         DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM conference WHERE ID=" + id,"root","");
 
-        foreach (DataRow row in myTable.Rows)
+        // only try to access result if there is one
+        if (myTable.Rows.Count > 0)
         {
+            DataRow row = myTable.Rows[0];
             conf = new Conference(Int32.Parse(row["ID"].ToString()),
                 row["name"].ToString(),
                 row["description"].ToString(),
@@ -83,7 +85,8 @@ public class Conference
                 DateTime.Parse(row["dateTime"].ToString()) // todo: might need to convert SQL DateTime to this datetime class
                 );
         }
-
+    
+        
         return conf;
     }
 
