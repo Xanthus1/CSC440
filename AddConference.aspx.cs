@@ -22,7 +22,7 @@ public partial class AddConference : System.Web.UI.Page
     protected void btn_submitpaper_Click(object sender, EventArgs e)
     {
 
-        string storedPath = "~/Images/"; 
+        string storedPath = "default.jpg"; 
         int maxPapers = 100;
         if (FileUploadControl.HasFile)
         {
@@ -31,7 +31,7 @@ public partial class AddConference : System.Web.UI.Page
                 string fileName = Path.GetFileName(FileUploadControl.FileName);
                 FileInfo fileInfo = new FileInfo(fileName);
                 string extension = fileInfo.Extension;
-                storedPath = storedPath + fileName;
+                storedPath = fileName;
 
                 if (extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase))
                 {

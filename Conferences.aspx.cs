@@ -27,7 +27,11 @@ public partial class Conferences : System.Web.UI.Page
             form1.InnerHtml = "<b> Error: Login with your account to access the conferences page</b>";
             return;
         }
-
+        //check if user is admin, if not make the add conference button invisible
+        if (!(HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_ADMIN)))
+        {
+            add_conf.Visible = false;
+        }
         // Get list of conferences from database
         confList = Conference.getConferenceList();
 
@@ -79,5 +83,11 @@ public partial class Conferences : System.Web.UI.Page
         Button btn = (Button)sender;
         Server.Transfer("ConferenceDetail.aspx?ConfID="+btn.Attributes["confID"],true);
         confTable.Visible = false;
+    }
+
+    protected void add_conf_Click(object sender, EventArgs e)
+    {
+        //send the user (only admin can see) to the add conference page
+        Server.Transfer("AddConference.aspx");
     }
 }

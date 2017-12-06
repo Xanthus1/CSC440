@@ -11,7 +11,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
     static String IMAGE_RESOURCE_PATH = "/papers"; // todo: is this used or needed?
     Conference conf; // store conference loaded on this page
     Registration registration; // store registration details (whether checked in or registered or not)
-        
+
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -34,7 +34,8 @@ public partial class ConferenceDetail : System.Web.UI.Page
             lbl_Title.Text = "Error";
             conf = new Conference();
         }
-        else {
+        else
+        {
             // get ID from previous form
             String idString = Request.QueryString["ConfID"].ToString();
             int id = Int32.Parse(idString);
@@ -49,14 +50,17 @@ public partial class ConferenceDetail : System.Web.UI.Page
         // get Registration info / init registration object
         int userID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
         int confID = conf.getID();
-        registration = new Registration(userID,confID);
+        registration = new Registration(userID, confID);
 
 
         //hide buttons based on registration / checked in status / privilege
         refreshPageVisibleControls();
+        if (!this.IsPostBack)
+        {
+            img_conf.ImageUrl = "~/Images/" + conf.getImagePath();
 
+        }
     }
-
     protected void btn_reviewpapers_Click(object sender, EventArgs e)
     {
 
