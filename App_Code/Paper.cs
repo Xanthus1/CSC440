@@ -51,6 +51,11 @@ public class Paper
         return confID;
     }
 
+    public String getDescription()
+    {
+        return description;
+    }
+
     public String getTitle()
     {
         return title;
@@ -100,6 +105,27 @@ public class Paper
             return row["docPath"].ToString();
         }
         return null;
+    }
+
+    static public Paper getPaper(int paperID)
+    {
+        Paper p;
+
+
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM papers WHERE id=" + paperID,
+            "root", "");
+
+        DataRow row = myTable.Rows[0];
+
+        p = new Paper(Int32.Parse(row["ID"].ToString()),
+                Int32.Parse(row["authorid"].ToString()),
+                "Author Name", // Todo: also get author name, need a join
+                Int32.Parse(row["confid"].ToString()),
+                row["title"].ToString(),
+                row["description"].ToString(),
+                row["docpath"].ToString());
+
+        return p;
     }
 
     public List<Paper> getPapersForConf(int confID)

@@ -16,7 +16,7 @@
         <tr>
             <td>Password</td>
             <td>
-                <asp:TextBox ID="tb_password" runat="server"  OnTextChanged="tb_TextChanged"></asp:TextBox>
+                <asp:TextBox ID="tb_password" runat="server"  OnTextChanged="tb_TextChanged" AutoCompleteType="Disabled"></asp:TextBox>
             </td>
         </tr>
         </table>

@@ -22,8 +22,10 @@ public partial class Papers : System.Web.UI.Page
 
     private int privilege;
     private int confID;
+    private int confReviewPhase;
     private int userID; // store user id for sql commands
 
+    
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -39,6 +41,7 @@ public partial class Papers : System.Web.UI.Page
             form1.InnerHtml = "<b> Error: Login with your account to access the conferences page</b>";
             return;
         }
+      
 
         userID = int.Parse(HttpContext.Current.Session["userKey"].ToString());
         paperList = new List<Paper>();
@@ -54,6 +57,12 @@ public partial class Papers : System.Web.UI.Page
             //todo: Show error message (Replace content area)
             return; // no confID selected, don't show anything
         }
+        // get conference review phase
+        Conference c = Conference.getConference(confID);
+        confReviewPhase = c.getReviewPhase();
+
+
+        setPageDisplay(); // makes changes to the header based on conference phase, and whether admin or not
 
         getPapersBids(); // gets papers and bids for this conference
         
@@ -61,8 +70,34 @@ public partial class Papers : System.Web.UI.Page
         
     }
 
+    // makes changes to the header based on conference phase, and whether admin or not
+    private void setPageDisplay()
+    {
+        // hide the "Assign reviews to bid button", until logic below determins to show it
+        btnAssignReview.Visible = false;
+
+        //during bid phase, hide the review columns
+        if (confReviewPhase == 0)
+        {
+            headerReview.Visible = false;
+
+            // if admin in this phase, show the button to go to next phase
+            if (HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_ADMIN))
+            {
+                btnAssignReview.Visible = true;
+            }
+        }
+        //during review phase, hide bid column
+        if (confReviewPhase == 1)
+        {
+            headerBid.Visible = false;
+        }
+
+        
+    }
+
     //method to add papers/related buttons to table
-    public void paperTableDisplay()
+    private void paperTableDisplay()
     {
         // add row for each paper
         // use i to keep count, paper[0] correlates with bid[0], etc.
@@ -90,28 +125,45 @@ public partial class Papers : System.Web.UI.Page
             tr.Cells.Add(td);
 
             // bid values
-            td = new TableCell();
-            TextBox tb = new TextBox();
-            tb.Text = ""+b.getRating();
-            td.Controls.Add(tb);
-            tb.TextChanged += tb_bid_Changed;
-            tb.Attributes["bidIndex"] = ""+i;
-            tb.AutoPostBack = true;
-            tr.Cells.Add(td);
+            // only show if in bid phase
+            if (confReviewPhase == 0)
+            {
+                td = new TableCell();
+                TextBox tb = new TextBox();
+                tb.Text = "" + b.getRating();
+                td.Controls.Add(tb);
+                tb.TextChanged += tb_bid_Changed;
+                tb.Attributes["bidIndex"] = "" + i;
+                tb.AutoPostBack = true;
+                tr.Cells.Add(td);
+            }
 
             //Review button 
-            td = new TableCell();
-            Button btn = new Button();
-            btn.Text = "Review";
-            btn.Attributes.Add("paperID", "" + p.getID()); // store key attribute, so onclick method knows which paper to review
-            btn.Click += btn_Review_Click;
-            td.Controls.Add(btn);
-            tr.Cells.Add(td);
+            // only show if in review phase
+            if (confReviewPhase == 1)
+            {
+                td = new TableCell();
+                Button btn = new Button();
+                btn.Text = "Review";
+                btn.Attributes.Add("paperID", "" + p.getID()); // store key attribute, so onclick method knows which paper to review
+                btn.Click += btn_Review_Click;
+                td.Controls.Add(btn);
+                tr.Cells.Add(td);
+            }
 
             paperTable.Rows.Add(tr);
+           
 
             i++;
         }
+    }
+
+    protected void getPapersReviews()
+    {
+        paperList = new List<Paper>();
+        // review list
+
+        //todo: get list of reviews, so when you click a review button 
     }
 
     protected void getPapersBids()
@@ -189,4 +241,13 @@ public partial class Papers : System.Web.UI.Page
         bidList[bidIndex].saveBid(newRating);
     }
 
+    // assign reviews to the bids
+    protected void btnAssignReview_Click(object sender, EventArgs e)
+    {
+        // changes phase to review phase
+        Conference c = Conference.getConference(confID);
+        c.setConferencePhase(1);
+
+        // todo: 
+    }
 }

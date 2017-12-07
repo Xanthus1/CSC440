@@ -113,6 +113,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
     protected void refreshPageVisibleControls()
     {
         //todo: Handeling viewing your own paper
+        btn_viewpaper.Visible = false; // todo: allow this is you're a researcher?
 
         // if you're already registered, don't show register buttons
         if (registration.isRegistered())
