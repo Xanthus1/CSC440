@@ -10,24 +10,24 @@ public partial class AddConference : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        //if (HttpContext.Current.Session["name"] == null)
-        //{
+        if (HttpContext.Current.Session["name"] == null)
+        {
             // no current session, initialize session as guest
-            //Account.setGuestSession();
-        //}
+            Account.setGuestSession();
+        }
         // Guests don't have access to conferences: show error and stop loading page
-        //if (HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_GUEST))
-        //{
-        form1.InnerHtml = "<b> Error: Login with your account to access the conferences page</b>";
-        //return;
-        // }
-        //StatusLabel.Text = "Status: ";
-        //if (!this.IsPostBack)
-        //{
-           // time_selector.Hour = 08;
-          //  time_selector.Minute = 00;
-         //   time_selector.AmPm = MKB.TimePicker.TimeSelector.AmPmSpec.AM;
-       // }
+        if (!(HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_ADMIN)))
+        {
+            div1.InnerHtml = "<b> Error: Login with your admin account to access the conferences page</b>";
+            return;
+        }
+        StatusLabel.Text = "Status: ";
+        if (!this.IsPostBack)
+        {
+           time_selector.Hour = 08;
+           time_selector.Minute = 00;
+           time_selector.AmPm = MKB.TimePicker.TimeSelector.AmPmSpec.AM;
+        }
     }
 
     protected void btn_submitpaper_Click(object sender, EventArgs e)
