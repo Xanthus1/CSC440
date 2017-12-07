@@ -67,6 +67,10 @@ public class Conference
     {
         return dateTime;
     }
+    public int getReviewPhase()
+    {
+        return reviewPhase;
+    }
     
     // get conference from table using key id
     static public Conference getConference(int id)
@@ -124,5 +128,13 @@ public class Conference
         String date_time = dTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
         //need to add image path
         DBHelper.insertQuery("Insert Into conference (`Name`, `Description`, `PaperLimit`, `ImagePath`, `DateTime`) VALUES ('"+cName+"', '"+cDesc+"', "+pMax+", '"+iPath+"', '"+date_time+"')", "root","");
+    }
+
+    public void setConferencePhase(int phase)
+    {
+        reviewPhase = phase;
+
+        // update qry 
+        DBHelper.insertQuery("UPDATE conference SET reviewphase="+reviewPhase, "root", "");
     }
 }

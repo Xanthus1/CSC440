@@ -57,6 +57,14 @@ public class Review
     public List<Review> getReviewsForPaper(int paperID)
     {
         List<Review> reviewList = new List<Review>();
+
+        //todo: SQL to get reviews
         return reviewList;
+    }
+
+    public static void assignReviewsForConference(int confID)
+    {
+        //todo: SQL command to assign reviews based on bid 
+        // currently, just assign the top 3 reviews for each paper
     }
 }
