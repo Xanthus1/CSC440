@@ -16,6 +16,40 @@
 CREATE DATABASE IF NOT EXISTS `csc440conferencemanagement` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `csc440conferencemanagement`;
 
+-- Dumping structure for table csc440conferencemanagement.alerts
+CREATE TABLE IF NOT EXISTS `alerts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(11) DEFAULT NULL,
+  `alertMsg` varchar(100) DEFAULT NULL,
+  `viewed` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_user` (`userID`),
+  CONSTRAINT `fk_user` FOREIGN KEY (`userID`) REFERENCES `user` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Alert table for users';
+
+-- Dumping data for table csc440conferencemanagement.alerts: ~0 rows (approximately)
+/*!40000 ALTER TABLE `alerts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `alerts` ENABLE KEYS */;
+
+-- Dumping structure for table csc440conferencemanagement.bid
+CREATE TABLE IF NOT EXISTS `bid` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ReviewerID` int(11) DEFAULT NULL,
+  `PaperID` int(11) DEFAULT NULL,
+  `Rating` int(5) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_Bid_user` (`ReviewerID`),
+  KEY `FK_Bid_papers` (`PaperID`),
+  CONSTRAINT `FK_Bid_papers` FOREIGN KEY (`PaperID`) REFERENCES `papers` (`ID`),
+  CONSTRAINT `FK_Bid_user` FOREIGN KEY (`ReviewerID`) REFERENCES `user` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table csc440conferencemanagement.bid: ~1 rows (approximately)
+/*!40000 ALTER TABLE `bid` DISABLE KEYS */;
+REPLACE INTO `bid` (`Id`, `ReviewerID`, `PaperID`, `Rating`) VALUES
+	(16, 1, 8, 5);
+/*!40000 ALTER TABLE `bid` ENABLE KEYS */;
+
 -- Dumping structure for table csc440conferencemanagement.conference
 CREATE TABLE IF NOT EXISTS `conference` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -24,34 +58,39 @@ CREATE TABLE IF NOT EXISTS `conference` (
   `PaperLimit` int(11) DEFAULT NULL,
   `ImagePath` tinytext,
   `DateTime` datetime DEFAULT NULL,
+  `reviewPhase` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table csc440conferencemanagement.conference: ~2 rows (approximately)
+-- Dumping data for table csc440conferencemanagement.conference: ~3 rows (approximately)
 /*!40000 ALTER TABLE `conference` DISABLE KEYS */;
-REPLACE INTO `conference` (`ID`, `Name`, `Description`, `PaperLimit`, `ImagePath`, `DateTime`) VALUES
-	(1, 'Test Conference', 'The Best', 3, '/Here', '2017-12-05 15:04:02'),
-	(2, 'Another Conference', 'The worst', 5, '/There', '2017-12-05 15:04:18');
+REPLACE INTO `conference` (`ID`, `Name`, `Description`, `PaperLimit`, `ImagePath`, `DateTime`, `reviewPhase`) VALUES
+	(1, 'Math Con', 'Math conference for all ages', 1, 'conf1.jpg', '2017-12-06 20:40:17', b'1'),
+	(2, 'CSC Conference', 'It\'s so easy', 1, 'conf2.jpg', '2017-12-06 20:40:19', b'1'),
+	(3, 'New Conference', 'Admin added conference', 0, 'CSC 440 - Class Diagram v2.jpg', '2017-12-14 10:00:00', b'1');
 /*!40000 ALTER TABLE `conference` ENABLE KEYS */;
 
 -- Dumping structure for table csc440conferencemanagement.papers
 CREATE TABLE IF NOT EXISTS `papers` (
   `ID` int(100) NOT NULL AUTO_INCREMENT,
-  `DocPath` tinytext,
   `AuthorID` int(11) DEFAULT NULL,
+  `DocPath` tinytext,
   `ConfID` int(11) DEFAULT NULL,
-  `title` varchar(100) DEFAULT NULL,
+  `title` varchar(50) DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`ID`),
   KEY `PaperConfID` (`ConfID`),
   KEY `fk_AuthorID` (`AuthorID`),
   CONSTRAINT `PaperConfID` FOREIGN KEY (`ConfID`) REFERENCES `conference` (`ID`),
   CONSTRAINT `fk_AuthorID` FOREIGN KEY (`AuthorID`) REFERENCES `user` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
--- Dumping data for table csc440conferencemanagement.papers: ~1 rows (approximately)
+-- Dumping data for table csc440conferencemanagement.papers: ~3 rows (approximately)
 /*!40000 ALTER TABLE `papers` DISABLE KEYS */;
-REPLACE INTO `papers` (`ID`, `DocPath`, `AuthorID`, `ConfID`, `title`) VALUES
-	(10, 'TestDoc.docx', 6, 2, 'Another Conference');
+REPLACE INTO `papers` (`ID`, `AuthorID`, `DocPath`, `ConfID`, `title`, `description`) VALUES
+	(1, 1, 'burden_csc547_hw4.docx', 1, 'HisPaper', 'The paper'),
+	(2, 2, 'cmdb_documentation.docx', 1, 'HerPaper', 'Her Paper description'),
+	(8, 1, 'burden_csc547_hw4.docx', 2, 'His CSC Paper', 'The best CSC Paper');
 /*!40000 ALTER TABLE `papers` ENABLE KEYS */;
 
 -- Dumping structure for table csc440conferencemanagement.registration
@@ -60,19 +99,21 @@ CREATE TABLE IF NOT EXISTS `registration` (
   `UserID` int(11) DEFAULT NULL,
   `ConfID` int(11) DEFAULT NULL,
   `Privilege` int(3) DEFAULT NULL,
-  `checkedIn` bit(1) DEFAULT NULL,
+  `checkedin` bit(1) DEFAULT NULL,
   PRIMARY KEY (`RID`),
   KEY `UserID` (`UserID`),
   KEY `ConfID` (`ConfID`),
   CONSTRAINT `ConfID` FOREIGN KEY (`ConfID`) REFERENCES `conference` (`ID`),
   CONSTRAINT `UserID` FOREIGN KEY (`UserID`) REFERENCES `user` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- Dumping data for table csc440conferencemanagement.registration: ~2 rows (approximately)
+-- Dumping data for table csc440conferencemanagement.registration: ~0 rows (approximately)
 /*!40000 ALTER TABLE `registration` DISABLE KEYS */;
-REPLACE INTO `registration` (`RID`, `UserID`, `ConfID`, `Privilege`, `checkedIn`) VALUES
-	(2, 6, 1, 2, b'1'),
-	(3, 6, 2, 2, b'1');
+REPLACE INTO `registration` (`RID`, `UserID`, `ConfID`, `Privilege`, `checkedin`) VALUES
+	(1, 1, 1, 2, b'1'),
+	(2, 1, 1, 2, b'1'),
+	(3, 1, 2, 2, b'0'),
+	(4, 1, 2, 2, b'0');
 /*!40000 ALTER TABLE `registration` ENABLE KEYS */;
 
 -- Dumping structure for table csc440conferencemanagement.reviews
@@ -82,6 +123,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `Reviewer` varchar(70) DEFAULT NULL,
   `PrivateComment` text,
   `Comment` text,
+  `Completed` bit(1) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `PaperID` (`PaperID`),
   CONSTRAINT `PaperID` FOREIGN KEY (`PaperID`) REFERENCES `papers` (`ID`)
@@ -99,14 +141,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   `AccessLevel` int(3) NOT NULL,
   `Name` varchar(70) NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `Password` (`Password`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table csc440conferencemanagement.user: ~2 rows (approximately)
+-- Dumping data for table csc440conferencemanagement.user: ~3 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 REPLACE INTO `user` (`ID`, `email`, `Password`, `AccessLevel`, `Name`) VALUES
-	(6, 'scott@gmail.com', '123456', 2, 'Scott'),
-	(7, 'admin', 'admin', 3, 'Admin');
+	(1, 'Guy', '123456', 2, 'Guy'),
+	(2, 'Girl', '123456', 2, 'Girl'),
+	(3, 'admin', 'admin', 3, 'admin');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
