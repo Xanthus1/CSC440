@@ -12,10 +12,10 @@
                 <asp:TextBox ID="tb_email" runat="server" OnTextChanged="tb_TextChanged" AutoPostBack="false"></asp:TextBox>
                 </td></tr>
             <tr><td>Password</td><td>
-                <asp:TextBox ID="tb_password" runat="server" OnTextChanged="tb_TextChanged" AutoPostBack="false"></asp:TextBox>
+                <asp:TextBox ID="tb_password" runat="server" OnTextChanged="tb_TextChanged" AutoPostBack="false" AutoCompleteType="Disabled"></asp:TextBox>
                 </td></tr>
             <tr><td>Confirm Password</td><td>
-                <asp:TextBox ID="tb_passwordconfirm" runat="server" OnTextChanged="tb_TextChanged" AutoPostBack="false"></asp:TextBox>
+                <asp:TextBox ID="tb_passwordconfirm" runat="server" OnTextChanged="tb_TextChanged" AutoPostBack="false" AutoCompleteType="Disabled"></asp:TextBox>
                 </td></tr>
         </table>
         <br />
