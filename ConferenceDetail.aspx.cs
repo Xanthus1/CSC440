@@ -60,6 +60,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
     protected void btn_reviewpapers_Click(object sender, EventArgs e)
     {
 
+        Server.Transfer("Papers.aspx?ConfID=" + conf.getID());
     }
 
     protected void btn_viewpaper_Click(object sender, EventArgs e)

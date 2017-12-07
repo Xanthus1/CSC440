@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.UI.WebControls;
 
 /// <summary>
 /// Summary description for Paper
@@ -14,19 +15,20 @@ public class Paper
     private String authorName; // this field is from the user table, using AuthorID as foreign key
     private int confID;
     private string title;
+    private string description;
     private string docPath;
-    private int reviewCount; // this field is calculated from how many reviews this paper currently has
     
     // constructor function used to create a paper object with data from the DB
-    public Paper(int id, int authorID, String authorName, int confID, string title, string path, int reviewCount)
+    // when we need to access the paper, having the authorname is useful
+    public Paper(int id, int authorID, String authorName, int confID, string title, string description, string path)
     {
         this.id = id;
         this.authorID = authorID;
         this.authorName = authorName;
         this.confID = confID;
         this.title = title;
+        this.description = description;
         this.docPath = path;
-        this.reviewCount = reviewCount;
     }
 
     //methods to get paper data
@@ -57,11 +59,6 @@ public class Paper
     public String getDocPath()
     {
         return docPath;
-    }
-
-    public int getReviewCount()
-    {
-        return reviewCount;
     }
 
     // submitting new paper: this public method takes parameters from the web page
@@ -107,11 +104,10 @@ public class Paper
 
     public List<Paper> getPapersForConf(int confID)
     {
-        List<Paper> paperList = new List<Paper>();
 
-        //todo: access database and get list of papers for specific conference
-        // need to do a Join to also get the name of the author from the user table
-        return paperList;
+
+
+        return null; // todo don't need
     }
 
     public void viewPaper(int id)
