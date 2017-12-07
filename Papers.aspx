@@ -4,10 +4,11 @@
     <form id="form1" runat="server">
         <asp:Table ID="paperTable" runat="server">
             <asp:TableHeaderRow>
-                <asp:TableHeaderCell Width="30%">Paper Title</asp:TableHeaderCell>
+                <asp:TableHeaderCell Width="20%">Paper Title</asp:TableHeaderCell>
                 <asp:TableHeaderCell Width="20%">Author</asp:TableHeaderCell>
-                <asp:TableHeaderCell Width="25%">Times Reviewed</asp:TableHeaderCell>
-                <asp:TableHeaderCell Width="25%">Review</asp:TableHeaderCell>
+                <asp:TableHeaderCell Width="20%">Description</asp:TableHeaderCell>
+                <asp:TableHeaderCell Width="20%">Bid Score</asp:TableHeaderCell>
+                <asp:TableHeaderCell Width="20%">Review</asp:TableHeaderCell>
             </asp:TableHeaderRow>
         </asp:Table>
     </form>

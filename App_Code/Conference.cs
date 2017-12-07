@@ -16,9 +16,10 @@ public class Conference
     private int paperLimit;
     private String imagePath;
     private DateTime dateTime;
+    private int reviewPhase;
 
     // Constructor requires all conference info
-    public Conference(int id, String name, String description, int paperLimit, String imagePath, DateTime dateTime)
+    public Conference(int id, String name, String description, int paperLimit, String imagePath, DateTime dateTime, int reviewPhase)
     {
         this.id = id;
         this.name = name;
@@ -26,6 +27,7 @@ public class Conference
         this.paperLimit = paperLimit;
         this.imagePath = imagePath;
         this.dateTime = dateTime;
+        this.reviewPhase = reviewPhase;
     }
 
 
@@ -82,7 +84,8 @@ public class Conference
                 row["description"].ToString(),
                 Int32.Parse(row["paperLimit"].ToString()),
                 row["imagePath"].ToString(),
-                DateTime.Parse(row["dateTime"].ToString()) // todo: might need to convert SQL DateTime to this datetime class
+                DateTime.Parse(row["dateTime"].ToString()),
+                Int32.Parse(row["reviewPhase"].ToString())// todo: might need to convert SQL DateTime to this datetime class
                 );
         }
     
@@ -99,13 +102,13 @@ public class Conference
         // convert retrieved data to Conference objects and add them to the list
         foreach (DataRow row in myTable.Rows)
         {
-                
             Conference conf = new Conference(Int32.Parse(row["ID"].ToString()),
                 row["name"].ToString(),
                 row["description"].ToString(),
                 Int32.Parse(row["paperLimit"].ToString()),
                 row["imagePath"].ToString(),
-                DateTime.Parse(row["dateTime"].ToString()) // todo: might need to convert SQL DateTime to this datetime class
+                DateTime.Parse(row["dateTime"].ToString()),
+                Int32.Parse(row["reviewPhase"].ToString())
                 );
                    
             confList.Add(conf);
