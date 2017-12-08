@@ -44,7 +44,6 @@ public partial class Papers : System.Web.UI.Page
         userID = account.getUserKey();
         paperList = new List<Paper>();
 
-
         // conference ID passed by previous page
         try
         {

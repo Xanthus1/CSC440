@@ -27,7 +27,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
             return;
         }
 
-        //Get Current conference from previous form
+        //Get Current conference from URL (passed from conference list button)
         if (Request.QueryString["ConfID"] == null)
         {
             lbl_Title.Text = "Error";
@@ -37,41 +37,42 @@ public partial class ConferenceDetail : System.Web.UI.Page
         {
             // get ID from previous form
             String idString = Request.QueryString["ConfID"].ToString();
-            int id = Int32.Parse(idString);
+            int confID = Int32.Parse(idString);
 
-            // get conference object from table using id
-            conf = Conference.getConference(id);
+            // get conference object from Database using id
+            conf = Conference.getConference(confID);
+
+            // update data on page from conference
             lbl_Title.Text = conf.getName();
             lbl_description.Text = conf.getDescription();
             lbl_datetime.Text = conf.getDateTime().ToString();
         }
 
         // get Registration info / init registration object
-        int userID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
-        int confID = conf.getID();
-        registration = new Registration(userID, confID);
-
+        // we need this to get registration and checkin status before updating the page controls
+        registration = conf.getRegistration(account.getUserKey());
 
         //hide buttons based on registration / checked in status / privilege
         refreshPageVisibleControls();
+
+        // image handeling: Burden comment?
         if (!this.IsPostBack)
         {
             img_conf.ImageUrl = "~/Images/" + conf.getImagePath();
-
         }
     }
+
+
     protected void btn_reviewpapers_Click(object sender, EventArgs e)
     {
-
         Server.Transfer("Papers.aspx?ConfID=" + conf.getID());
     }
 
+    // button to view your currently submitted paper
     protected void btn_viewpaper_Click(object sender, EventArgs e)
     {
         //pull paper from Paper folder based on filename in DB
-        int confID = conf.getID();
-        int authorID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
-        String docPath = Paper.getPaperPath(authorID,confID); // docpath is currently just filename
+        String docPath = Paper.getPaperPath(account.getUserKey(),conf.getID()); // docpath is currently just filename
 
         byte[] Content = File.ReadAllBytes(Path.Combine(Server.MapPath("~/Papers/") + "/" + docPath));
         Response.ContentType = "text/docx";
@@ -93,15 +94,15 @@ public partial class ConferenceDetail : System.Web.UI.Page
 
         if (btn.ID.Equals("btn_register_researcher"))
         {
-            registration.setPrivilege(Registration.ACCESS_RESEARCHER);
+            registration.setPrivilege(Registration.PRIV_RESEARCHER);
         }
         else
         {
-            registration.setPrivilege(Registration.ACCESS_REVIEWER);
+            registration.setPrivilege(Registration.PRIV_REVIEWER);
         }
 
-        // use registration object to register, adding registration to DB
-        registration.register();
+        // use conference object to process registration details, and register user to conference
+        conf.processNewRegistration(registration);
 
         // change visibility of controls based on registration / privilege
         refreshPageVisibleControls();
@@ -125,7 +126,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
             int authorID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
             int confID = conf.getID();
 
-            if (Paper.hasSubmitted(authorID, confID))
+            if (account.hasPaperForConf(confID))
             {
                 StatusLabel.Visible = false;
                 FileUploadControl.Visible = false;
@@ -155,9 +156,12 @@ public partial class ConferenceDetail : System.Web.UI.Page
             btn_checkin.Visible = false;
         }
 
+        //todo: Burden hide the view paper button unless you have one submitted
+
         
     }
 
+    //todo: Burden comments
     protected void btn_submitpaper_Click(object sender, EventArgs e)
     {
         if (FileUploadControl.HasFile)
@@ -175,11 +179,9 @@ public partial class ConferenceDetail : System.Web.UI.Page
                     FileUploadControl.SaveAs(path);
                     StatusLabel.Text = "Upload status: File uploaded to "+path;
 
-                    int authorID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
-                    int confID = conf.getID();
                     String title = lbl_Title.Text;
                     
-                    Paper.submitPaper(authorID, confID, title, fileName); // currently works just using filename, all papers in /papers/ directory
+                    account.submitPaper(conf.getID(), title, fileName); // currently works just using filename, all papers in /papers/ directory
                 }
                 else
                 {

@@ -137,4 +137,17 @@ public class Conference
         // update qry 
         DBHelper.insertQuery("UPDATE conference SET reviewphase="+reviewPhase, "root", "");
     }
+
+    public void processNewRegistration( Registration registration)
+    {
+        registration.register();
+    }
+
+    // returns registration for this conference for specific user
+    public Registration getRegistration(int userKey)
+    {
+        Registration registration = new Registration(userKey, id);
+
+        return registration;
+    }
 }

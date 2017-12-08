@@ -30,6 +30,7 @@ public partial class PaperView : System.Web.UI.Page
         
         // get paper ID from URL 
         //todo: make sure this reviewer has access to paper
+        // will have to check the review table
         int paperID = int.Parse(Request.QueryString["PaperID"].ToString());
         paper = Paper.getPaper(paperID);
 
@@ -44,7 +45,7 @@ public partial class PaperView : System.Web.UI.Page
     {
         //pull paper from Paper folder based on filename in DB
         int confID = paper.getConfID();
-        int authorID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
+        int authorID = paper.getAuthorID();
         String docPath = Paper.getPaperPath(authorID, confID); // docpath is currently just filename
 
         byte[] Content = File.ReadAllBytes(Path.Combine(Server.MapPath("~/Papers/") + "/" + docPath));

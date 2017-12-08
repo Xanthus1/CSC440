@@ -135,4 +135,30 @@ public class Account
         HttpContext.Current.Session["accessLevel"] = ACCESS_GUEST;
     }
 
+    public Boolean hasPaperForConf(int confID)
+    {
+        // query for a paper matching this conference and user
+        DataTable myTable = new DataTable();
+        myTable = DBHelper.dataTableFromQuery("SELECT * FROM papers WHERE authorid=" + userKey + " AND confid=" + confID,
+            "root", "");
+
+        // if there is a paper found, return true, otherwise return false
+        if (myTable.Rows.Count > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // submitting new paper: this public method takes parameters from the web page
+    // to insert a new paper row in the DB upon upload
+    public void submitPaper(int confID, String title, string docPath)
+    {
+
+        // insert new paper into the DB
+        DBHelper.insertQuery("INSERT INTO papers (authorid,confid,title,docPath) VALUES("
+            + userKey + "," + confID + ",'" + title + "','" + docPath + "')",
+            "root", "");
+    }
+
 }
