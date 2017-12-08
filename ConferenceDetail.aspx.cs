@@ -9,20 +9,19 @@ using System.Web.UI.WebControls;
 public partial class ConferenceDetail : System.Web.UI.Page
 {
     static String IMAGE_RESOURCE_PATH = "/papers"; // todo: is this used or needed?
+    Account account;
     Conference conf; // store conference loaded on this page
     Registration registration; // store registration details (whether checked in or registered or not)
 
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        // init guest settings if session doesn't exist
-        if (HttpContext.Current.Session["name"] == null)
-        {
-            // no current session, initialize session as guest
-            Account.setGuestSession();
-        }
+        // get account from session or init as Guest
+        account = new Account();
+        account.loadFromSession();
+
         // Guests don't have access to conferences: show error and stop loading page
-        if (HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_GUEST))
+        if (account.isGuest())
         {
             form1.InnerHtml = "<b> Error: Login with your account to access the Conference details page</b>";
             return;

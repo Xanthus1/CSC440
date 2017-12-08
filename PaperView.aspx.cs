@@ -9,19 +9,19 @@ using System.Web.UI.WebControls;
 // This page is for a researcher to view their own paper with the ratings/comments
 public partial class PaperView : System.Web.UI.Page
 {
+    Account account;
     Paper paper;
 
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        // init guest settings if session doesn't exist
-        if (HttpContext.Current.Session["name"] == null)
-        {
-            // no current session, initialize session as guest
-            Account.setGuestSession();
-        }
+        // get account from session or init as Guest
+        account = new Account();
+        account.loadFromSession();
+
+
         // Guests don't have access to conferences: show error and stop loading page
-        if (HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_GUEST))
+        if (account.isGuest())
         {
             form1.InnerHtml = "<b> Error: Login with your account to access the conferences page</b>";
             return;

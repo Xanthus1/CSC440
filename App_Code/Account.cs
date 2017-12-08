@@ -19,10 +19,11 @@ public class Account
 
     public Account()
     {
-        // init account with blank credentials
-        name = "Guest";
-        accessLevel = ACCESS_GUEST;
-        userKey = USER_NONE;
+    }
+
+    public int getUserKey()
+    {
+        return userKey;
     }
 
     public String getName()
@@ -30,13 +31,23 @@ public class Account
         return name;
     }
 
-    public int getAccessLevel()
+    public bool isGuest()
     {
-        return accessLevel;
+        return (accessLevel == ACCESS_GUEST);
     }
 
-    // return 
-    static public Boolean login(String e, String p)
+    public bool isUser()
+    {
+        return (accessLevel == ACCESS_USER);
+    }
+
+    public bool isAdmin()
+    {
+        return (accessLevel == ACCESS_ADMIN);
+    }
+
+    // return whether login was successful, and load account details into class and session
+    public Boolean login(String e, String p)
     {
         //access database
 
@@ -55,6 +66,11 @@ public class Account
         HttpContext.Current.Session["name"] = row["name"].ToString();
         HttpContext.Current.Session["userKey"] = row["id"].ToString();
         HttpContext.Current.Session["accessLevel"] = row["accesslevel"].ToString();
+
+        // update attributes for this class
+        name = row["name"].ToString();
+        userKey = Int32.Parse(row["id"].ToString());
+        accessLevel = Int32.Parse(row["accesslevel"].ToString());
 
         // return whether login successful
         return true;
@@ -91,23 +107,32 @@ public class Account
     {
         if(HttpContext.Current.Session["name"] != null)
         {
+            // load info from session
             name = HttpContext.Current.Session["name"].ToString();
             userKey = int.Parse(HttpContext.Current.Session["userKey"].ToString());
             accessLevel = int.Parse(HttpContext.Current.Session["accessLevel"].ToString());
         }
-        else // if info is not currently in session, load other info
+        else // if info is not currently in session, load guest info to class and session
         {
+            // set local vars to guest settings
             name = "Guest";
+            userKey = USER_NONE;
             accessLevel = ACCESS_GUEST;
+
+            //set session name to guest 
+            HttpContext.Current.Session["name"] = "Guest";
+            HttpContext.Current.Session["userKey"] = USER_NONE;
+            HttpContext.Current.Session["accessLevel"] = ACCESS_GUEST;
         }
     }
 
-    //  uses class information and stores it to your session
-    public static void setGuestSession()
+    // called on the logout page only; only need to change session, not class attributes
+    public static void logout()
     {
-        // no session active, set session name to guest 
+        //set session name to guest 
         HttpContext.Current.Session["name"] = "Guest";
-        HttpContext.Current.Session["userKey"] = Account.USER_NONE;
-        HttpContext.Current.Session["accessLevel"] = Account.ACCESS_GUEST;
+        HttpContext.Current.Session["userKey"] = USER_NONE;
+        HttpContext.Current.Session["accessLevel"] = ACCESS_GUEST;
     }
+
 }

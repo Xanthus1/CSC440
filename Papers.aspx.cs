@@ -13,6 +13,7 @@ public partial class Papers : System.Web.UI.Page
     static int MAX_REVIEWS = 3; // Max number of reviews a paper can have
     List<Paper> paperList;
     List<Bid> bidList;
+    Account account;
 
     // booleans to hide/show actions for papers depending on 
     // conference phase, and privilege for this conference
@@ -29,21 +30,18 @@ public partial class Papers : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        // init guest settings if session doesn't exist
-        if (HttpContext.Current.Session["name"] == null)
-        {
-            // no current session, initialize session as guest
-            Account.setGuestSession();
-        }
+        // get account from session or init as Guest
+        account = new Account();
+        account.loadFromSession();
+
         // Guests don't have access to conferences: show error and stop loading page
-        if (HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_GUEST))
+        if (account.isGuest())
         {
             form1.InnerHtml = "<b> Error: Login with your account to access the conferences page</b>";
             return;
         }
       
-
-        userID = int.Parse(HttpContext.Current.Session["userKey"].ToString());
+        userID = account.getUserKey();
         paperList = new List<Paper>();
 
 

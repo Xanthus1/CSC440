@@ -8,15 +8,15 @@ using System.Web.UI.WebControls;
 
 public partial class AddConference : System.Web.UI.Page
 {
+    Account account;
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (HttpContext.Current.Session["name"] == null)
-        {
-            // no current session, initialize session as guest
-            Account.setGuestSession();
-        }
+        // get account from session or init as Guest
+        account = new Account();
+        account.loadFromSession();
+
         // Guests don't have access to conferences: show error and stop loading page
-        if (!(HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_ADMIN)))
+        if (!(account.isAdmin()))
         {
             div1.InnerHtml = "<b> Error: Login with your admin account to access the conferences page</b>";
             return;

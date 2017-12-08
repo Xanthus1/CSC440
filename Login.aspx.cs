@@ -7,14 +7,17 @@ using System.Web.UI.WebControls;
 
 public partial class Login : System.Web.UI.Page
 {
+    Account account;
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        // get account from session or init as Guest
+        account = new Account();
+        account.loadFromSession();
     }
 
     protected void btn_login_Click(object sender, EventArgs e)
     {
-        // validate inputs
+        // validate inputs before attempting registration
         Boolean valid = true;
         String warning = "";
 
@@ -34,12 +37,11 @@ public partial class Login : System.Web.UI.Page
             valid = false;
         }
 
-        //todo: test for valid login
-
-
+        // Inputs were valid, attempt to login
         if (valid)
         {
-            if(Account.login(tb_email.Text, tb_password.Text))
+            // if loging in successfully
+            if(account.login(tb_email.Text, tb_password.Text))
             {
                 Server.Transfer("Default.aspx");
             }

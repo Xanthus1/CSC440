@@ -10,28 +10,27 @@ using MySql.Data.MySqlClient;
 // page for reviewers to review papers for conference
 public partial class Conferences : System.Web.UI.Page
 {
+    Account account;
     List<Conference> confList; // list of all active conferences
-    
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        // init guest settings if session doesn't exist
-        if (HttpContext.Current.Session["name"] == null)
-        {
-            // no current session, initialize session as guest
-            Account.setGuestSession();
-        }
+        // get account from session or init as Guest
+        account = new Account();
+        account.loadFromSession();
+
         // Guests don't have access to conferences: show error and stop loading page
-        if (HttpContext.Current.Session["accesslevel"].ToString().Equals(""+Account.ACCESS_GUEST))
+        if (account.isGuest())
         {
             form1.InnerHtml = "<b> Error: Login with your account to access the conferences page</b>";
             return;
         }
         //check if user is admin, if not make the add conference button invisible
-        if (!(HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_ADMIN)))
+        if (!(account.isAdmin()))
         {
             add_conf.Visible = false;
         }
+
         // Get list of conferences from database
         confList = Conference.getConferenceList();
 
@@ -77,7 +76,7 @@ public partial class Conferences : System.Web.UI.Page
         } 
     }
 
-
+    // when you click view conference, go to conference detail 
     protected void btn_View_Click(object sender, EventArgs e)
     {
         Button btn = (Button)sender;
