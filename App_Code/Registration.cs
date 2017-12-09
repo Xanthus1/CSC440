@@ -15,9 +15,9 @@ public class Registration
     private int privilege;
     private Boolean checkedIn;
     private Boolean registered;
-    static int ACCESS_NONE = 0; // before registering and adding to the database, user has no access
-    public static int ACCESS_RESEARCHER = 1;
-    public static int ACCESS_REVIEWER = 2;
+    static int PRIV_NONE = 0; // before registering and adding to the database, user has no privilege
+    public static int PRIV_RESEARCHER = 1;
+    public static int PRIV_REVIEWER = 2;
 
 
     // constructor is called when viewing conference details - you have an active user and conference ID available 
@@ -28,7 +28,7 @@ public class Registration
         this.userID = userID;
         this.confID = confID;
 
-        privilege = ACCESS_NONE;
+        privilege = PRIV_NONE;
         checkedIn = false;
         registered = false;
 
@@ -88,18 +88,16 @@ public class Registration
     }
 
     // registers with confID and userID loaded into this object
+    // privilege is set previously depending on which register button was clicked
     public void register()
     {
-       // todo: currently will default privilege to reviewer
-        privilege = ACCESS_REVIEWER;
-
         // when you initially register, you are checked out. DB stores as 0 or 1 for false and true.
         int checkedInInt = 0 ;
+        registered = true;
+        checkedIn = false;
         
         DBHelper.insertQuery("INSERT into registration (userid, confid, privilege, checkedin) VALUES (" + userID + "," + confID + "," + privilege + "," + checkedInInt + ")",
-            "root","");
-
-        
+            "root","");        
     }
 
     public void setPrivilege(int privilege)

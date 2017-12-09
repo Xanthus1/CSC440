@@ -19,10 +19,11 @@ public class Account
 
     public Account()
     {
-        // init account with blank credentials
-        name = "Guest";
-        accessLevel = ACCESS_GUEST;
-        userKey = USER_NONE;
+    }
+
+    public int getUserKey()
+    {
+        return userKey;
     }
 
     public String getName()
@@ -30,13 +31,23 @@ public class Account
         return name;
     }
 
-    public int getAccessLevel()
+    public bool isGuest()
     {
-        return accessLevel;
+        return (accessLevel == ACCESS_GUEST);
     }
 
-    // return 
-    static public Boolean login(String e, String p)
+    public bool isUser()
+    {
+        return (accessLevel == ACCESS_USER);
+    }
+
+    public bool isAdmin()
+    {
+        return (accessLevel == ACCESS_ADMIN);
+    }
+
+    // return whether login was successful, and load account details into class and session
+    public Boolean login(String e, String p)
     {
         //access database
 
@@ -55,6 +66,11 @@ public class Account
         HttpContext.Current.Session["name"] = row["name"].ToString();
         HttpContext.Current.Session["userKey"] = row["id"].ToString();
         HttpContext.Current.Session["accessLevel"] = row["accesslevel"].ToString();
+
+        // update attributes for this class
+        name = row["name"].ToString();
+        userKey = Int32.Parse(row["id"].ToString());
+        accessLevel = Int32.Parse(row["accesslevel"].ToString());
 
         // return whether login successful
         return true;
@@ -91,23 +107,64 @@ public class Account
     {
         if(HttpContext.Current.Session["name"] != null)
         {
+            // load info from session
             name = HttpContext.Current.Session["name"].ToString();
             userKey = int.Parse(HttpContext.Current.Session["userKey"].ToString());
             accessLevel = int.Parse(HttpContext.Current.Session["accessLevel"].ToString());
         }
-        else // if info is not currently in session, load other info
+        else // if info is not currently in session, load guest info to class and session
         {
+            // set local vars to guest settings
             name = "Guest";
+            userKey = USER_NONE;
             accessLevel = ACCESS_GUEST;
+
+            //set session name to guest 
+            HttpContext.Current.Session["name"] = "Guest";
+            HttpContext.Current.Session["userKey"] = USER_NONE;
+            HttpContext.Current.Session["accessLevel"] = ACCESS_GUEST;
         }
     }
 
-    //  uses class information and stores it to your session
-    public static void setGuestSession()
+    // called on the logout page only; only need to change session, not class attributes
+    public static void logout()
     {
-        // no session active, set session name to guest 
+        //set session name to guest 
         HttpContext.Current.Session["name"] = "Guest";
-        HttpContext.Current.Session["userKey"] = Account.USER_NONE;
-        HttpContext.Current.Session["accessLevel"] = Account.ACCESS_GUEST;
+        HttpContext.Current.Session["userKey"] = USER_NONE;
+        HttpContext.Current.Session["accessLevel"] = ACCESS_GUEST;
     }
+
+    public Boolean hasPaperForConf(int confID)
+    {
+        // query for a paper matching this conference and user
+        DataTable myTable = new DataTable();
+        myTable = DBHelper.dataTableFromQuery("SELECT * FROM papers WHERE authorid=" + userKey + " AND confid=" + confID,
+            "root", "");
+
+        // if there is a paper found, return true, otherwise return false
+        if (myTable.Rows.Count > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // submitting new paper: this public method takes parameters from the web page
+    // to insert a new paper row in the DB upon upload
+    public void submitPaper(int confID, String title, string docPath)
+    {
+
+        // insert new paper into the DB
+        DBHelper.insertQuery("INSERT INTO papers (authorid,confid,title,docPath) VALUES("
+            + userKey + "," + confID + ",'" + title + "','" + docPath + "')",
+            "root", "");
+    }
+
+    // this will return a list of alerts for this account
+    public List<Alerts> getAlerts()
+    {
+        return Alerts.getAlertsListforUser(userKey);
+    }
+
 }

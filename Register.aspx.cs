@@ -12,22 +12,29 @@ public partial class Register : System.Web.UI.Page
     Account account;
     protected void Page_Load(object sender, EventArgs e)
     {
-        
+        // get account from session or init as Guest
+        account = new Account();
+        account.loadFromSession();
     }
 
     //clicking submit  to register new account
 
     protected void btn_submit_Click(object sender, EventArgs e)
     {
-        // validate inputs
-        Boolean valid = true;
+        // validate inputs (todo: use Account to verify, returning warning message
+        String name = tb_name.Text;
+        String email = tb_email.Text;
+        String password = tb_password.Text;
+        String passwordConfirm = tb_passwordconfirm.Text;
+
         String warning = "";
+        Boolean valid = true;
 
         // if fields are empty, highlight in red and add to the warning message
         if (tb_name.Text.Equals(""))
         {
             warning += "Missing Name<p>";
-            tb_name.BackColor = System.Drawing.Color.Red;
+
 
             valid = false;
         }
@@ -71,7 +78,7 @@ public partial class Register : System.Web.UI.Page
             valid = false;
         }
 
-
+        // if valid, register account and go to homepage. Otherwise 
         if (valid)
         {
             // create account and navigate to login page

@@ -6,9 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-// list of papers for anybody to view
-// if you're a reviewer and in bid phase , you will see a bid column
-// if you're an admin, you will see a button to change to the Review phase and assign reviews
+// List of papers for reviewer only
 
 public partial class Papers : System.Web.UI.Page
 {
@@ -249,7 +247,15 @@ public partial class Papers : System.Web.UI.Page
         // Dumb (but easy) algorithm for assigning papers
         // get a list of all the papers and bids
         // for each paper, select the top 3 bids (select ~all bids for a paper~ ORDER BY rating DESC LIMIT 3)
-        // delete all other bids for that paper
+        
+        // delete all other bids for that paper (everybody else lost the bid)
+        
+        // add records in the review table , linking this paper to the awarded reviewers
+        // this will represent that these reviewers have access to review this paper
+        // On a conferencedetails page, they will have a button to review papers
+        // the "PaperReviewList" will use these new records to populate a table (should only have up to
+        // 7 results)
+
         // see if those reviewers have reached their 7 paper limit
         //   if they have, then remove all their other bids (don't let them get any more papers)
         // this wont be the best way to ensure equal distribution, but will satisfy the condition

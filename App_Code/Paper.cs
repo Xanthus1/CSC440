@@ -66,31 +66,6 @@ public class Paper
         return docPath;
     }
 
-    // submitting new paper: this public method takes parameters from the web page
-    // to insert a new paper row in the DB upon upload
-    static public void submitPaper(int authorID, int confID, String title, string docPath)
-    {
-        // insert new paper into the DB
-        DBHelper.insertQuery("INSERT INTO papers (authorid,confid,title,docPath) VALUES("
-            + authorID + "," + confID + ",'" + title + "','" + docPath + "')",
-            "root", "");
-    }
-
-    static public Boolean hasSubmitted(int authorID, int confID)
-    {
-        // query for a paper matching this conference and user
-        DataTable myTable = new DataTable();
-        myTable = DBHelper.dataTableFromQuery("SELECT * FROM papers WHERE authorid=" + authorID + " AND confid=" + confID,
-            "root", "");
-
-        // if there is a paper found, return true, otherwise return false
-        if (myTable.Rows.Count > 0)
-        {
-            return true;
-        }
-        return false;
-    }
-
     static public String getPaperPath(int authorID, int confID)
     {
         // query for a paper matching this conference and user
@@ -126,14 +101,6 @@ public class Paper
                 row["docpath"].ToString());
 
         return p;
-    }
-
-    public List<Paper> getPapersForConf(int confID)
-    {
-
-
-
-        return null; // todo don't need
     }
 
     public void viewPaper(int id)
