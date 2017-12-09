@@ -55,4 +55,9 @@ public partial class PaperView : System.Web.UI.Page
         Response.OutputStream.Write(Content, 0, Content.Length);
         Response.End();
     }
+
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        //todo: Submit review!
+    }
 }

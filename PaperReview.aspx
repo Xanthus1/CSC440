@@ -31,7 +31,7 @@
         <br />
         (For Admin Only)<br />
         <br />
-        <asp:Button ID="Button2" runat="server" Text="Submit Review" />
+        <asp:Button ID="Button2" runat="server" Text="Submit Review" OnClick="Button2_Click" />
         <br />
     </form>
 </asp:Content>
