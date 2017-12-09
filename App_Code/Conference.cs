@@ -71,7 +71,16 @@ public class Conference
     {
         return reviewPhase;
     }
-    
+
+    public Boolean isBidPhase()
+    {
+        return (reviewPhase == 0);
+    }
+    public Boolean isReviewPhase()
+    {
+        return (reviewPhase == 1);
+    }
+
     // get conference from table using key id
     static public Conference getConference(int id)
     {
@@ -130,12 +139,10 @@ public class Conference
         DBHelper.insertQuery("Insert Into conference (`Name`, `Description`, `PaperLimit`, `ImagePath`, `DateTime`) VALUES ('"+cName+"', '"+cDesc+"', "+pMax+", '"+iPath+"', '"+date_time+"')", "root","");
     }
 
-    public void setConferencePhase(int phase)
+    public void startReviewPhase()
     {
-        reviewPhase = phase;
-
-        // update qry 
-        DBHelper.insertQuery("UPDATE conference SET reviewphase="+reviewPhase, "root", "");
+        // update qry  to change phase
+        DBHelper.insertQuery("UPDATE conference SET reviewphase=1 WHERE id="+id, "root", "");
     }
 
     public void processNewRegistration( Registration registration)

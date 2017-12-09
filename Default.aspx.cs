@@ -18,10 +18,10 @@ public partial class _Default : System.Web.UI.Page
         account = new Account();
         account.loadFromSession();
 
-        //todo: load latest conference
-        // display title, image, description
+        //todo: Advertise a conference. 
 
         //todo: display alerts
+
     }
 
 

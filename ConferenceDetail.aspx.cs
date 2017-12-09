@@ -62,13 +62,14 @@ public partial class ConferenceDetail : System.Web.UI.Page
         }
     }
 
-
-    protected void btn_reviewpapers_Click(object sender, EventArgs e)
+    // button to view all papers and bid, if conference is in bid phase
+    protected void btn_viewpapers_Click(object sender, EventArgs e)
     {
-        Server.Transfer("Papers.aspx?ConfID=" + conf.getID());
+        Response.Redirect("Papers.aspx?ConfID=" + conf.getID());
     }
 
     // button to view your currently submitted paper
+    //todo: this should transfer to a different page to see your reviews, according to the label
     protected void btn_viewpaper_Click(object sender, EventArgs e)
     {
         //pull paper from Paper folder based on filename in DB
@@ -82,9 +83,13 @@ public partial class ConferenceDetail : System.Web.UI.Page
         Response.End();
     }
 
+    // checking in
     protected void btn_checkin_Click(object sender, EventArgs e)
     {
         registration.checkIn();
+
+        // hide checkin button
+        btn_checkin.Visible = false;
     }
 
     protected void btn_register_Click(object sender, EventArgs e)
@@ -105,7 +110,9 @@ public partial class ConferenceDetail : System.Web.UI.Page
         conf.processNewRegistration(registration);
 
         // change visibility of controls based on registration / privilege
+        // should show checkin button
         refreshPageVisibleControls();
+        btn_checkin.Visible = true;
 
     }
 
@@ -113,13 +120,24 @@ public partial class ConferenceDetail : System.Web.UI.Page
     protected void refreshPageVisibleControls()
     {
         //todo: Handeling viewing your own paper
-        btn_viewpaper.Visible = false; // todo: allow this is you're a researcher?
+        btn_viewpaper.Visible = false; // todo: allow this if you're a researcher?
+        lbl_status.Text = "Status: "; // reset status text so it can be rebuilt below
 
         // if you're already registered, don't show register buttons
         if (registration.isRegistered())
         {
             btn_register_researcher.Visible = false;
             btn_register_reviewer.Visible = false;
+
+            String regType;
+            if (registration.getPrivilege() == Registration.PRIV_RESEARCHER){
+                regType = "Researcher";
+            }
+            else{
+                regType = "Reviewer";
+            }
+
+            lbl_status.Text += "You are registered as a "+regType+". \n";
 
             // if you're registered, check if you've submitted a paper
             // if you have, hide the paper submittal
@@ -128,15 +146,16 @@ public partial class ConferenceDetail : System.Web.UI.Page
 
             if (account.hasPaperForConf(confID))
             {
+                lbl_status.Text += "You have a paper submitted. \n";
                 StatusLabel.Visible = false;
                 FileUploadControl.Visible = false;
                 btn_submitpaper.Visible = false;
+                btn_viewpaper.Visible = true;
             }
             else
             {
                 StatusLabel.Visible = false;
             }
-            
 
             // if already checked in , hide checkin button
             if (registration.isCheckedIn())
@@ -151,9 +170,27 @@ public partial class ConferenceDetail : System.Web.UI.Page
             StatusLabel.Visible = false;
             FileUploadControl.Visible = false;
             btn_submitpaper.Visible = false;
+            lbl_status.Text += "You are not yet registered. \n";
 
             // not registered, can't check in
             btn_checkin.Visible = false;
+        }
+
+        // add conference phase to the Status.
+        String confStatus;
+        if (conf.isBidPhase())
+        {
+            confStatus = "The Conference is in Bid Phase.  ";
+        }
+        else
+        {
+            confStatus = " The Conference is in Review Phase.  ";
+        }
+        lbl_status.Text += confStatus;
+
+        if (registration.isCheckedIn())
+        {
+            lbl_status.Text += "You are Checked In. ";
         }
 
         //todo: Burden hide the view paper button unless you have one submitted

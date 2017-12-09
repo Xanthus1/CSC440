@@ -44,4 +44,19 @@ public class Alerts
         return viewed;
     }
 
+    public static List<Alerts> getAlertsListforUser(int userKey)
+    {
+        List<Alerts> alertsList = new List<Alerts>();
+
+
+        //todo: sql to get alerts
+
+        return alertsList;
+    }
+
+    static public void  addAlert(String alertString, int userKey)
+    {
+        //todo: add alert to database
+    }
+
 }

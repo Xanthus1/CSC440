@@ -93,6 +93,8 @@ public class Registration
     {
         // when you initially register, you are checked out. DB stores as 0 or 1 for false and true.
         int checkedInInt = 0 ;
+        registered = true;
+        checkedIn = false;
         
         DBHelper.insertQuery("INSERT into registration (userid, confid, privilege, checkedin) VALUES (" + userID + "," + confID + "," + privilege + "," + checkedInInt + ")",
             "root","");        

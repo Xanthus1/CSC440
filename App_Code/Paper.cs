@@ -103,11 +103,6 @@ public class Paper
         return p;
     }
 
-    public List<Paper> getPapersForConf(int confID)
-    {
-        return null; // todo don't need
-    }
-
     public void viewPaper(int id)
     {
     

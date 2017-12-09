@@ -161,4 +161,10 @@ public class Account
             "root", "");
     }
 
+    // this will return a list of alerts for this account
+    public List<Alerts> getAlerts()
+    {
+        return Alerts.getAlertsListforUser(userKey);
+    }
+
 }

@@ -80,7 +80,7 @@ public partial class Conferences : System.Web.UI.Page
     protected void btn_View_Click(object sender, EventArgs e)
     {
         Button btn = (Button)sender;
-        Server.Transfer("ConferenceDetail.aspx?ConfID="+btn.Attributes["confID"],true);
+        Response.Redirect("ConferenceDetail.aspx?ConfID="+btn.Attributes["confID"],true);
         confTable.Visible = false;
     }
 
