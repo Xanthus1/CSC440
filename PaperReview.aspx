@@ -19,15 +19,26 @@
         <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Download Paper" />
         <br />
         <br />
+        <asp:DropDownList id="list_ratings"
+                    AutoPostBack="True"
+                    runat="server">
+
+                  <asp:ListItem Selected="True" Value="Strongly Decline"> Strongly Decline </asp:ListItem>
+                  <asp:ListItem Value="Decline"> Decline </asp:ListItem>
+                  <asp:ListItem Value="Neutral"> Neutral </asp:ListItem>
+                  <asp:ListItem Value="Accept"> Accept </asp:ListItem>
+                  <asp:ListItem Value="Strongly Accept"> Strongly Accept </asp:ListItem>
+
+               </asp:DropDownList>
         <br />
         <span style="text-decoration: underline">Review</span><br />
         <br />
-        Public Comment:<asp:TextBox ID="TextBox1" runat="server" Height="16px" Width="447px"></asp:TextBox>
+        Public Comment:<asp:TextBox ID="public_comment" runat="server" Height="16px" Width="447px"></asp:TextBox>
         <br />
         (For Researcher)<br />
         <br />
         Private Comment:
-        <asp:TextBox ID="TextBox2" runat="server" Height="16px" Width="447px"></asp:TextBox>
+        <asp:TextBox ID="private_comment" runat="server" Height="16px" Width="447px"></asp:TextBox>
         <br />
         (For Admin Only)<br />
         <br />

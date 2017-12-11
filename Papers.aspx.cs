@@ -16,6 +16,7 @@ public partial class Papers : System.Web.UI.Page
     Conference conference;
     List<Paper> paperList;
     List<Bid> bidList;
+    List<Review> reviewList;
     Account account;
     Registration registration;
 
@@ -46,9 +47,10 @@ public partial class Papers : System.Web.UI.Page
         {
             confID = int.Parse(Request.QueryString["ConfID"].ToString());
         }
-        catch
+        catch(Exception ex)
         {
-            //todo: Show error message (Replace content area)
+            lbl_status.Visible = false;
+            lbl_status.Text = "Error loading conference: " + ex.Message;
             return; // no confID selected, don't show anything
         }
         // get conference
@@ -97,8 +99,10 @@ public partial class Papers : System.Web.UI.Page
         // use i to keep count, paper[0] correlates with bid[0], etc.
         int i = 0;
         Bid b;
+
         foreach (Paper p in paperList)
         {
+            
             TableRow tr = new TableRow();
             TableCell td = new TableCell();
             b = bidList[i];
@@ -115,7 +119,7 @@ public partial class Papers : System.Web.UI.Page
 
             // description
             td = new TableCell();
-            td.Text = p.getTitle();
+            td.Text = p.getDescription();
             tr.Cells.Add(td);
 
             // bid values
@@ -134,7 +138,7 @@ public partial class Papers : System.Web.UI.Page
 
             //Review button 
             // only show if in review phase
-            if (conference.isReviewPhase())
+            if (conference.isReviewPhase() && registration.getPrivilege() == Registration.PRIV_REVIEWER)
             {
                 td = new TableCell();
                 Button btn = new Button();
@@ -154,9 +158,7 @@ public partial class Papers : System.Web.UI.Page
 
     protected void getPapersReviews()
     {
-        paperList = new List<Paper>();
-        // review list
-        //todo: get list of reviews, so when you click a review button 
+        //todo: this
     }
 
     protected void getPapersBids()
@@ -166,16 +168,15 @@ public partial class Papers : System.Web.UI.Page
 
         // get table joining papers for this conference and bids for this reviewer
         // left join, get all papers even if you don't have a current bid, a bid obj will be created
-        String sqlSel = "u.name as username,"+
-            "p.id as paperid, p.authorid as authorid, p.docpath as docpath, p.confid as confid, p.title as title,"+
+        String sqlSel = "u.name as username," +
+            "p.id as paperid, p.authorid as authorid, p.docpath as docpath, p.confid as confid, p.title as title," +
             "p.description as description, b.id as bkey, b.rating as rating";
 
         DataTable myTable = DBHelper.dataTableFromQuery("SELECT " + sqlSel
             + " FROM papers p "
             + "LEFT JOIN bid b ON p.id=b.paperid "
             + "LEFT JOIN user u ON p.authorid=u.id "
-            + "WHERE p.confid=" + conference.getID()
-            +" AND (b.reviewerid IS NULL OR b.reviewerid="+account.getUserKey()+")",
+            + "WHERE p.confid=" + conference.getID(),
             "root", "");
 
         // convert retrieved data to Paper and Bid objects on the table
@@ -197,8 +198,8 @@ public partial class Papers : System.Web.UI.Page
             Bid b;
             // if there isn't a bid for this paper, initialize a bid objects 
             // the button method in the table will set the rating, and save it to the db
-                        
-            if(row["bkey"].ToString().Equals(""))
+
+            if (row["bkey"].ToString().Equals(""))
             {
                 b = new Bid(account.getUserKey(),
                     Int32.Parse(row["paperid"].ToString()));
@@ -210,10 +211,10 @@ public partial class Papers : System.Web.UI.Page
                 int paperID = int.Parse(row["paperid"].ToString());
                 int rating = int.Parse(row["rating"].ToString());
 
-                b = new Bid(bkey,account.getUserKey(),paperID,rating);
+                b = new Bid(bkey, account.getUserKey(), paperID, rating);
             }
             bidList.Add(b);
-            
+
         }
     }
 
@@ -232,7 +233,6 @@ public partial class Papers : System.Web.UI.Page
 
         // get bid object from list
         // save bid with updated value
-        // todo: might have to have autocallback
         bidList[bidIndex].saveBid(newRating);
     }
 
@@ -240,21 +240,7 @@ public partial class Papers : System.Web.UI.Page
     protected void btnAssignReview_Click(object sender, EventArgs e)
     {
         // changes phase to review phase
+        Review.setReviewsByConf(conference.getID());
         conference.startReviewPhase();
-
-        // todo: Andrew assign reviews to the bids
-        // Each review can only have up to 3 reviews
-        // each reviewer can only have 7 papers to review
-
-        // Dumb (but easy) algorithm for assigning papers
-        // get a list of all the papers and bids
-        // for each paper, select the top 3 bids (select ~all bids for a paper~ ORDER BY rating DESC LIMIT 3)
-        // delete all other bids for that paper
-        // see if those reviewers have reached their 7 paper limit
-        //   if they have, then remove all their other bids (don't let them get any more papers)
-        // this wont be the best way to ensure equal distribution, but will satisfy the condition
-        // it's possible for some to not get reviewed
-
-
     }
 }

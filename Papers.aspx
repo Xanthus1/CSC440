@@ -2,7 +2,8 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <form id="form1" runat="server">
-        <br />
+            <asp:label id="lbl_status" runat="server" text="Status:" visible="False"/>
+            <br />
         <asp:Button ID="btnAssignReview" runat="server" Text="Assign Reviews to Bids" OnClick="btnAssignReview_Click"/> 
         <br />
         <asp:Table ID="paperTable" runat="server" Width="100%" Height="40px">

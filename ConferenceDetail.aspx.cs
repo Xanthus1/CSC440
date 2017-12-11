@@ -8,7 +8,6 @@ using System.Web.UI.WebControls;
 
 public partial class ConferenceDetail : System.Web.UI.Page
 {
-    static String IMAGE_RESOURCE_PATH = "/papers"; // todo: is this used or needed?
     Account account;
     Conference conf; // store conference loaded on this page
     Registration registration; // store registration details (whether checked in or registered or not)
@@ -55,7 +54,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
         //hide buttons based on registration / checked in status / privilege
         refreshPageVisibleControls();
 
-        // image handeling: Burden comment?
+        // only load the image if this is the first load
         if (!this.IsPostBack)
         {
             img_conf.ImageUrl = "~/Images/" + conf.getImagePath();
@@ -74,7 +73,6 @@ public partial class ConferenceDetail : System.Web.UI.Page
     {
         //pull paper from Paper folder based on filename in DB
         String docPath = Paper.getPaperPath(account.getUserKey(),conf.getID()); // docpath is currently just filename
-
         byte[] Content = File.ReadAllBytes(Path.Combine(Server.MapPath("~/Papers/") + "/" + docPath));
         Response.ContentType = "text/docx";
         Response.AddHeader("content-disposition", "attachment; filename=" + docPath); // docpath is currently just filename
@@ -128,6 +126,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
         {
             btn_register_researcher.Visible = false;
             btn_register_reviewer.Visible = false;
+            
 
             String regType;
             if (registration.getPrivilege() == Registration.PRIV_RESEARCHER){
@@ -150,10 +149,14 @@ public partial class ConferenceDetail : System.Web.UI.Page
                 StatusLabel.Visible = false;
                 FileUploadControl.Visible = false;
                 btn_submitpaper.Visible = false;
+                lbl_pdescription.Visible = false;
+                paper_desc.Visible = false;
                 btn_viewpaper.Visible = true;
             }
             else
             {
+                lbl_pdescription.Visible = true;
+                paper_desc.Visible = true;
                 StatusLabel.Visible = false;
             }
 
@@ -171,6 +174,8 @@ public partial class ConferenceDetail : System.Web.UI.Page
             FileUploadControl.Visible = false;
             btn_submitpaper.Visible = false;
             lbl_status.Text += "You are not yet registered. \n";
+            lbl_pdescription.Visible = false;
+            paper_desc.Visible = false;
 
             // not registered, can't check in
             btn_checkin.Visible = false;
@@ -195,12 +200,17 @@ public partial class ConferenceDetail : System.Web.UI.Page
 
         //todo: Burden hide the view paper button unless you have one submitted
 
-        
+        //todo: hide register buttons if you are admin. Also update status appropriately for admin
+
+        //todo: hide paper description if you are researcher
+
+        //todo: c
     }
 
-    //todo: Burden comments
+    //when the submit paper button is clicked.
     protected void btn_submitpaper_Click(object sender, EventArgs e)
     {
+        //if a file has been selected
         if (FileUploadControl.HasFile)
         {
             try
@@ -209,26 +219,31 @@ public partial class ConferenceDetail : System.Web.UI.Page
                 FileInfo fileInfo = new FileInfo(fileName);
                 string extension = fileInfo.Extension;
 
+                //.docx is the only extension allowed.
                 if (extension.Equals(".docx", StringComparison.OrdinalIgnoreCase))
                 {
-
+                    //get the file info
                     String path = Path.Combine(Server.MapPath("~/Papers/") + fileName);
                     FileUploadControl.SaveAs(path);
                     StatusLabel.Text = "Upload status: File uploaded to "+path;
 
-                    String title = lbl_Title.Text;
+                    String title = fileName.Substring(0,fileName.Length-5);
                     
-                    account.submitPaper(conf.getID(), title, fileName); // currently works just using filename, all papers in /papers/ directory
+                    account.submitPaper(conf.getID(), title, fileName, paper_desc.Text); // currently works just using filename, all papers in /papers/ directory
+
                 }
+                //display error if wrong file.
                 else
                 {
                     StatusLabel.Text = "Upload status: The file could not be uploaded. " + extension + " Invalid file extension. DOCX is the only supported file type";
                 }
             }
+            //display any general error
             catch (Exception ex)
             {
                 StatusLabel.Text = "Upload status: The file could not be uploaded. The following error occured: " + ex.Message;
             }
+            refreshPageVisibleControls();
         }
     }
 }

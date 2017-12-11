@@ -109,7 +109,8 @@ CREATE TABLE IF NOT EXISTS `registration` (
 CREATE TABLE IF NOT EXISTS `reviews` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PaperID` int(11) DEFAULT NULL,
-  `Reviewer` varchar(70) DEFAULT NULL,
+  `Reviewer` int(11) DEFAULT NULL,
+  `Rating` text,
   `PrivateComment` text,
   `Comment` text,
   `Completed` bit(1) DEFAULT NULL,
