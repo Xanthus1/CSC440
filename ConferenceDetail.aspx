@@ -33,6 +33,13 @@
             <asp:FileUpload id="FileUploadControl" runat="server" />
         </p>
         <p style="text-align: center">
+            <asp:label id="lbl_pdescription" runat="server" text="Paper Description"/>
+        </p>
+        <p style="text-align: center">
+            &nbsp;
+            <asp:TextBox ID="paper_desc" runat="server" AutoPostBack="false" Height="137px" Width="481px"></asp:TextBox>
+            </p>
+        <p style="text-align: center">
             <asp:Button ID="btn_submitpaper" runat="server" OnClick="btn_submitpaper_Click" Text="Submit Paper" />
         </p>
         <p style="text-align: center">

@@ -103,6 +103,28 @@ public class Paper
         return p;
     }
 
+    static public List<Paper> getPapersByConf(int confID)
+    {
+        List<Paper> p = new List<Paper>();
+
+
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM papers WHERE confid=" + confID,
+            "root", "");
+
+        foreach (DataRow row in myTable.Rows)
+        {
+            p.Add(new Paper(Int32.Parse(row["ID"].ToString()),
+                Int32.Parse(row["authorid"].ToString()),
+                "Author Name", 
+                Int32.Parse(row["confid"].ToString()),
+                row["title"].ToString(),
+                row["description"].ToString(),
+                row["docpath"].ToString()));
+
+        }
+        return p;
+    }
+
     public void viewPaper(int id)
     {
     

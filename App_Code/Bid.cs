@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -9,33 +11,43 @@ using System.Web;
 public class Bid
 {
     private int id;
-    private int userID;
+    private int reviewerID;
     private int paperID;
     private int rating;
 
     // create a potential bid, with userid and paperid. later when you save it, you just need to pass the rating
-    public Bid(int userID, int paperID)
+    public Bid(int reviewerID, int paperID)
     {
         rating = 0;
-        this.userID = userID;
+        this.reviewerID = reviewerID;
         this.paperID = paperID;
     }
 
     // if you create a bid from the DB, pass all fields
-    public Bid(int id, int userID, int paperID, int rating)
+    public Bid(int id, int reviewerID, int paperID, int rating)
     {
         this.id = id;
-        this.userID = userID;
+        this.reviewerID = reviewerID;
         this.paperID = paperID;
         this.rating = rating;
     }
-
+    public int getID()
+    {
+        return id;
+    }
     // get bid rating
     public int getRating()
     {
         return rating;
     }
-
+    public int getPaperID()
+    {
+        return paperID;
+    }
+    public int getReviewerID()
+    {
+        return reviewerID;
+    }
     // saves bid in database
     public void saveBid(int r)
     {
@@ -57,7 +69,7 @@ public class Bid
         {
             // this is a new bid, do an insert
             DBHelper.insertQuery("INSERT INTO bid (reviewerID,paperid,rating) VALUES"
-                +"(" + userID + "," + paperID + "," + r+ ")",
+                +"(" + reviewerID + "," + paperID + "," + r+ ")",
                 "root", "");
 
             // update object with new primary key: the latest one added to the table
@@ -69,5 +81,28 @@ public class Bid
         }
 
         rating = r;
+    }
+    public static void deleteBid(int bidID)
+    {
+        DBHelper.insertQuery("DELETE FROM bid WHERE id=" + bidID,
+                "root", "");
+    }
+
+    public static List<Bid> getBidByPaper(int paperID)
+    {
+        List<Bid> bidList = new List<Bid>();
+        Debug.WriteLine("initial bidlist count ="+bidList.Count);
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM bid WHERE paperid=" + paperID,
+            "root", "");
+        Debug.WriteLine("mytable count =" + myTable.Rows.Count);
+        foreach (DataRow row in myTable.Rows)
+        {
+            bidList.Add(new Bid(Int32.Parse(row["ID"].ToString()),
+                Int32.Parse(row["reviewerID"].ToString()),
+                Int32.Parse(row["paperID"].ToString()),
+                Int32.Parse(row["Rating"].ToString())));
+        }
+
+        return bidList;
     }
 }

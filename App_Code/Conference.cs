@@ -40,6 +40,7 @@ public class Conference
         this.paperLimit = -1;
         this.imagePath = "IMAGEPATH_NONE";
         this.dateTime = DateTime.Today;
+        this.reviewPhase = 0;
     }
 
     public String getName()

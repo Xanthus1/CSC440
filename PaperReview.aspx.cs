@@ -11,7 +11,9 @@ public partial class PaperView : System.Web.UI.Page
 {
     Account account;
     Paper paper;
-
+    Review review;
+    List<Review> reviewList;
+    Boolean isValidReview;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -29,10 +31,27 @@ public partial class PaperView : System.Web.UI.Page
 
         
         // get paper ID from URL 
-        //todo: make sure this reviewer has access to paper
-        // will have to check the review table
         int paperID = int.Parse(Request.QueryString["PaperID"].ToString());
         paper = Paper.getPaper(paperID);
+
+        //load all reviews for this paper
+        reviewList = Review.getReviewForPaper(paperID);
+
+        foreach (Review r in reviewList)
+        {
+            //check if reviewer is valid
+            if (r.getReviewerID() == account.getUserKey())
+            {
+                isValidReview = true;
+                review = r;
+            }
+        }
+
+        if (!isValidReview)
+        {
+            form1.InnerHtml = "<b> You do not have permission to review this paper.</b>";
+            return;
+        }
 
         //update paper data on page
         lbl_author.Text = paper.getAuthorName();
@@ -58,6 +77,6 @@ public partial class PaperView : System.Web.UI.Page
 
     protected void Button2_Click(object sender, EventArgs e)
     {
-        //todo: Submit review!
+        Review.submitReview(review.getID(),review.getPaperID(),review.getReviewerID(),list_ratings.SelectedValue,public_comment.Text, private_comment.Text);
     }
 }

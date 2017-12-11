@@ -152,12 +152,12 @@ public class Account
 
     // submitting new paper: this public method takes parameters from the web page
     // to insert a new paper row in the DB upon upload
-    public void submitPaper(int confID, String title, string docPath)
+    public void submitPaper(int confID, String title, string docPath, string description)
     {
 
         // insert new paper into the DB
-        DBHelper.insertQuery("INSERT INTO papers (authorid,confid,title,docPath) VALUES("
-            + userKey + "," + confID + ",'" + title + "','" + docPath + "')",
+        DBHelper.insertQuery("INSERT INTO papers (authorid,confid,title,docPath, description) VALUES("
+            + userKey + "," + confID + ",'" + title + "','" + docPath + "','" + description +"')",
             "root", "");
     }
 
