@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -99,10 +100,28 @@ public partial class Papers : System.Web.UI.Page
         // use i to keep count, paper[0] correlates with bid[0], etc.
         int i = 0;
         Bid b;
+        List<Review> rList;
+        Boolean reviewStatus;
 
         foreach (Paper p in paperList)
         {
-            
+            reviewStatus = false;
+            rList = Review.getReviewForPaper(p.getID());
+            Debug.WriteLine("review list count ="+rList.Count);
+            foreach (Review r in rList)
+            {
+                if (conference.isReviewPhase() && registration.getPrivilege() == Registration.PRIV_REVIEWER)
+                {
+                    if (registration.getUserID() == r.getID())
+                    {
+                        reviewStatus = true;
+                    }
+                }
+            }
+            if (reviewStatus && conference.isReviewPhase() && registration.getPrivilege() == Registration.PRIV_REVIEWER)
+            {
+                continue;
+            }
             TableRow tr = new TableRow();
             TableCell td = new TableCell();
             b = bidList[i];

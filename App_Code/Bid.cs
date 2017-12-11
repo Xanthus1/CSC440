@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -90,10 +91,10 @@ public class Bid
     public static List<Bid> getBidByPaper(int paperID)
     {
         List<Bid> bidList = new List<Bid>();
-
-        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM bids WHERE paperid=" + paperID,
+        Debug.WriteLine("initial bidlist count ="+bidList.Count);
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM bid WHERE paperid=" + paperID,
             "root", "");
-
+        Debug.WriteLine("mytable count =" + myTable.Rows.Count);
         foreach (DataRow row in myTable.Rows)
         {
             bidList.Add(new Bid(Int32.Parse(row["ID"].ToString()),

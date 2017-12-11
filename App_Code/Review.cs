@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -156,8 +157,9 @@ public class Review
     public static void setReviewsByConf(int confID)
     {
         List<Paper> paperList = Paper.getPapersByConf(confID);
+        Debug.WriteLine(paperList.Count);
         List<Bid> bidList = new List<Bid>();
-
+        Debug.WriteLine(bidList.Count);
         foreach (Paper p in paperList)
         {
             List<Bid> tmpBidList = Bid.getBidByPaper(p.getID());
