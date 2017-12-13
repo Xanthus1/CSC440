@@ -261,5 +261,6 @@ public partial class Papers : System.Web.UI.Page
         // changes phase to review phase
         Review.setReviewsByConf(conference.getID());
         conference.startReviewPhase();
+        btnAssignReview.Visible = false;
     }
 }
