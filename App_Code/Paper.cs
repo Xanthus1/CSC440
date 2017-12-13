@@ -31,6 +31,18 @@ public class Paper
         this.docPath = path;
     }
 
+    //blank constructor
+    public Paper()
+    {
+        this.id = -1;
+        this.authorID = -1;
+        this.authorName = "";
+        this.confID = -1;
+        this.title = "";
+        this.description = "";
+        this.docPath = "";
+    }
+
     //methods to get paper data
     public int getID()
     {
@@ -125,8 +137,24 @@ public class Paper
         return p;
     }
 
-    public void viewPaper(int id)
+    public static Paper getPaperByConfandUser(int confID, int userID)
     {
-    
+        Paper p = new Paper();
+
+
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM papers WHERE confid=" + confID +" AND AuthorID = "+ userID,
+            "root", "");
+
+        foreach (DataRow row in myTable.Rows)
+        {
+            p = (new Paper(Int32.Parse(row["ID"].ToString()),
+                Int32.Parse(row["authorid"].ToString()),
+                "Author Name",
+                Int32.Parse(row["confid"].ToString()),
+                row["title"].ToString(),
+                row["description"].ToString(),
+                row["docpath"].ToString()));
+        }
+        return p;
     }
 }

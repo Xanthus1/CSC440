@@ -71,14 +71,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
     //todo: this should transfer to a different page to see your reviews, according to the label
     protected void btn_viewpaper_Click(object sender, EventArgs e)
     {
-        //pull paper from Paper folder based on filename in DB
-        String docPath = Paper.getPaperPath(account.getUserKey(),conf.getID()); // docpath is currently just filename
-        byte[] Content = File.ReadAllBytes(Path.Combine(Server.MapPath("~/Papers/") + "/" + docPath));
-        Response.ContentType = "text/docx";
-        Response.AddHeader("content-disposition", "attachment; filename=" + docPath); // docpath is currently just filename
-        Response.BufferOutput = true;
-        Response.OutputStream.Write(Content, 0, Content.Length);
-        Response.End();
+        Response.Redirect("Reviews.aspx?ConfID=" + conf.getID());
     }
 
     // checking in
@@ -118,7 +111,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
     protected void refreshPageVisibleControls()
     {
         //todo: Handeling viewing your own paper
-        btn_viewpaper.Visible = false; // todo: allow this if you're a researcher?
+        btn_viewpaper.Visible = false; 
         lbl_status.Text = "Status: "; // reset status text so it can be rebuilt below
 
         // if you're already registered, don't show register buttons
@@ -126,24 +119,24 @@ public partial class ConferenceDetail : System.Web.UI.Page
         {
             btn_register_researcher.Visible = false;
             btn_register_reviewer.Visible = false;
-            
+
 
             String regType;
-            if (registration.getPrivilege() == Registration.PRIV_RESEARCHER){
+            if (registration.getPrivilege() == Registration.PRIV_RESEARCHER) {
                 regType = "Researcher";
             }
-            else{
+            else {
                 regType = "Reviewer";
             }
 
-            lbl_status.Text += "You are registered as a "+regType+". \n";
+            lbl_status.Text += "You are registered as a " + regType + ". \n";
 
             // if you're registered, check if you've submitted a paper
             // if you have, hide the paper submittal
             int authorID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
             int confID = conf.getID();
 
-            if (account.hasPaperForConf(confID))
+            if (account.hasPaperForConf(confID) || registration.getPrivilege() == Registration.PRIV_REVIEWER)
             {
                 lbl_status.Text += "You have a paper submitted. \n";
                 StatusLabel.Visible = false;
@@ -155,9 +148,12 @@ public partial class ConferenceDetail : System.Web.UI.Page
             }
             else
             {
+                FileUploadControl.Visible = true;
                 lbl_pdescription.Visible = true;
                 paper_desc.Visible = true;
-                StatusLabel.Visible = false;
+                btn_submitpaper.Visible = true;
+                StatusLabel.Visible = true;
+            
             }
 
             // if already checked in , hide checkin button
@@ -176,9 +172,9 @@ public partial class ConferenceDetail : System.Web.UI.Page
             lbl_status.Text += "You are not yet registered. \n";
             lbl_pdescription.Visible = false;
             paper_desc.Visible = false;
-
-            // not registered, can't check in
+            btn_viewpaper.Visible = false;
             btn_checkin.Visible = false;
+            // not registered, can't check in
         }
 
         // add conference phase to the Status.
@@ -198,13 +194,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
             lbl_status.Text += "You are Checked In. ";
         }
 
-        //todo: Burden hide the view paper button unless you have one submitted
-
         //todo: hide register buttons if you are admin. Also update status appropriately for admin
-
-        //todo: hide paper description if you are researcher
-
-        //todo: c
     }
 
     //when the submit paper button is clicked.
