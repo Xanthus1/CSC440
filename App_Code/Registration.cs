@@ -55,6 +55,16 @@ public class Registration
     {
         return privilege;
     }
+
+    public Boolean isReviewer()
+    {
+        return privilege == PRIV_REVIEWER;
+    }
+
+    public Boolean isResearcher()
+    {
+        return privilege == PRIV_RESEARCHER;
+    }
     public Boolean isCheckedIn()
     {
         return checkedIn;
