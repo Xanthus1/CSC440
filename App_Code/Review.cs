@@ -40,6 +40,12 @@ public class Review
         this.completed = 0;
     }
 
+    // returns whether this review exists (whether it was instantiated with data or default constructor)
+    public Boolean exists()
+    {
+        return (id != -1);
+    }
+
     public int getID()
     {
         return id;
@@ -69,10 +75,10 @@ public class Review
         DBHelper.insertQuery("INSERT INTO reviews (paperID, reviewer, rating, comment, privatecomment, completed) Values("+pID+", "+ rID+", 'NA', 'NA', 'NA', 0)",
         "root", "");
     }
-    public static void submitReview(int id, int pID, int rID, string rating, string comment, string privateComment)
+    public static void submitReview(int id, string rating, string comment, string privateComment)
     {
-        DBHelper.insertQuery("UPDATE reviews SET completed=1, comment='"+comment+ "', privatecomment='" + privateComment + "', rating='" + rating + "' WHERE paperID=" + pID + " AND reviewer=" + rID,
-        "root", "");
+        DBHelper.insertQuery("UPDATE reviews SET completed=1, comment='"+comment+ "', privatecomment='" + privateComment + "', rating='" + rating + "' WHERE id="+id,
+            "root","");
     }
     public static List<Review> getReviewForPaper(int paperID)
     {
@@ -100,7 +106,8 @@ public class Review
         return reviewList;
     }
 
-    public static List<Review> getReviewForReviewer(int reviewerID)
+
+    public static List<Review> getReviewsForReviewer(int reviewerID)
     {
         List<Review> reviewList = new List<Review>();
 
@@ -128,7 +135,7 @@ public class Review
 
     public static int getReviewCountForReviewer(int reviewerID)
     {
-        List<Review> reviewList = getReviewForReviewer(reviewerID);
+        List<Review> reviewList = getReviewsForReviewer(reviewerID);
         int reviewcount = 0;
         foreach (Review r in reviewList)
         {

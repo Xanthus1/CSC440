@@ -167,4 +167,33 @@ public class Account
         return Alerts.getAlertsListforUser(userKey);
     }
 
+    // gets review for a specific paper for this user
+    public Review getReviewForPaper(int paperID)
+    {
+        Review review;
+
+        DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM reviews WHERE reviewer="+userKey+" AND paperid="+paperID, "root", "");
+
+        // only try to access result if there is one
+        if (myTable.Rows.Count > 0)
+        {
+            DataRow row = myTable.Rows[0];
+            review= new Review(Int32.Parse(row["ID"].ToString()),
+                Int32.Parse(row["paperID"].ToString()),
+                Int32.Parse(row["reviewer"].ToString()),
+                row["Rating"].ToString(),
+                row["Comment"].ToString(),
+                row["PrivateComment"].ToString(),
+                Int32.Parse(row["completed"].ToString())
+                );
+        }
+        else
+        {
+            // init with default settings, id will be -1 if no review found for this paper
+            review = new Review();
+        }
+
+        return review;
+    }
+
 }

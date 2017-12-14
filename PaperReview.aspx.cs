@@ -77,6 +77,9 @@ public partial class PaperView : System.Web.UI.Page
 
     protected void Button2_Click(object sender, EventArgs e)
     {
-        Review.submitReview(review.getID(),review.getPaperID(),review.getReviewerID(),list_ratings.SelectedValue,public_comment.Text, private_comment.Text);
+        Review.submitReview(review.getID(),
+            list_ratings.SelectedValue,
+            public_comment.Text.ToString(), 
+            private_comment.Text.ToString());
     }
 }

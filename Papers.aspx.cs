@@ -81,14 +81,21 @@ public partial class Papers : System.Web.UI.Page
             headerReview.Visible = false;
 
             // if admin in this phase, show the button to go to next phase
-            if (HttpContext.Current.Session["accesslevel"].ToString().Equals("" + Account.ACCESS_ADMIN))
+            if (account.isAdmin())
             {
                 btnAssignReview.Visible = true;
             }
         }
-        //during review phase or not a reviewer, hide Bid column
-        if (conference.isReviewPhase() || !(registration.getPrivilege()==Registration.PRIV_REVIEWER))
+        else
         {
+            // in review phase, hide Bid column
+            headerBid.Visible = false;
+        }
+
+        // if not a reviewer, hide the header and bid column regardless of phase
+        if (!(registration.isReviewer()))
+        {
+            headerReview.Visible = false;
             headerBid.Visible = false;
         }
     }
@@ -100,28 +107,13 @@ public partial class Papers : System.Web.UI.Page
         // use i to keep count, paper[0] correlates with bid[0], etc.
         int i = 0;
         Bid b;
-        List<Review> rList;
-        Boolean reviewStatus;
 
         foreach (Paper p in paperList)
         {
-            reviewStatus = false;
-            rList = Review.getReviewForPaper(p.getID());
-            Debug.WriteLine("review list count ="+rList.Count);
-            foreach (Review r in rList)
-            {
-                if (conference.isReviewPhase() && registration.getPrivilege() == Registration.PRIV_REVIEWER)
-                {
-                    if (registration.getUserID() == r.getID())
-                    {
-                        reviewStatus = true;
-                    }
-                }
-            }
-            if (reviewStatus && conference.isReviewPhase() && registration.getPrivilege() == Registration.PRIV_REVIEWER)
-            {
-                continue;
-            }
+            // get review for this paper (if you have one)
+            // we can use review.exists() to check whether one does or not
+            Review review = account.getReviewForPaper(p.getID());
+
             TableRow tr = new TableRow();
             TableCell td = new TableCell();
             b = bidList[i];
@@ -143,7 +135,7 @@ public partial class Papers : System.Web.UI.Page
 
             // bid values
             // only show if in bid phase and if reviewer
-            if (conference.isBidPhase() && registration.getPrivilege() == Registration.PRIV_REVIEWER)
+            if (conference.isBidPhase() && registration.isReviewer())
             {
                 td = new TableCell();
                 TextBox tb = new TextBox();
@@ -156,17 +148,24 @@ public partial class Papers : System.Web.UI.Page
             }
 
             //Review button 
-            // only show if in review phase
-            if (conference.isReviewPhase() && registration.getPrivilege() == Registration.PRIV_REVIEWER)
+            // only show if in review phase and you are reviewer
+            
+            if (conference.isReviewPhase() && registration.isReviewer())
             {
+                // return a blank cell, unless you have a review, in which case show a button 
                 td = new TableCell();
-                Button btn = new Button();
-                btn.Text = "Review";
-                btn.Attributes.Add("paperID", "" + p.getID()); // store key attribute, so onclick method knows which paper to review
-                btn.Click += btn_Review_Click;
-                td.Controls.Add(btn);
+                if (conference.isReviewPhase() && review.exists())
+                {
+                    td = new TableCell();
+                    Button btn = new Button();
+                    btn.Text = "Review";
+                    btn.Attributes.Add("paperID", "" + p.getID()); // store key attribute, so onclick method knows which paper to review
+                    btn.Click += btn_Review_Click;
+                    td.Controls.Add(btn);
+                }
                 tr.Cells.Add(td);
             }
+            
 
             paperTable.Rows.Add(tr);
            
@@ -181,7 +180,7 @@ public partial class Papers : System.Web.UI.Page
     }
 
     protected void getPapersBids()
-    {
+    {   
         paperList = new List<Paper>();
         bidList = new List<Bid>();
 
