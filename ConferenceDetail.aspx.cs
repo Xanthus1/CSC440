@@ -122,7 +122,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
 
 
             String regType;
-            if (registration.getPrivilege() == Registration.PRIV_RESEARCHER) {
+            if (registration.isResearcher()) {
                 regType = "Researcher";
             }
             else {
@@ -136,13 +136,18 @@ public partial class ConferenceDetail : System.Web.UI.Page
             int authorID = Int32.Parse(HttpContext.Current.Session["userKey"].ToString());
             int confID = conf.getID();
 
-            if (account.hasPaperForConf(confID) || registration.getPrivilege() == Registration.PRIV_REVIEWER)
+            if (account.hasPaperForConf(confID) || registration.isReviewer())
             {
-                lbl_status.Text += "You have a paper submitted. \n";
+                if (account.hasPaperForConf(confID))
+                {
+                    lbl_status.Text += "You have a paper submitted. \n";
+                }
+
                 StatusLabel.Visible = false;
                 FileUploadControl.Visible = false;
                 btn_submitpaper.Visible = false;
                 lbl_pdescription.Visible = false;
+                lbl_paperSubmittal.Visible = false;
                 paper_desc.Visible = false;
                 btn_viewpaper.Visible = true;
             }
@@ -169,6 +174,7 @@ public partial class ConferenceDetail : System.Web.UI.Page
             StatusLabel.Visible = false;
             FileUploadControl.Visible = false;
             btn_submitpaper.Visible = false;
+            lbl_paperSubmittal.Visible = false;
             lbl_status.Text += "You are not yet registered. \n";
             lbl_pdescription.Visible = false;
             paper_desc.Visible = false;
