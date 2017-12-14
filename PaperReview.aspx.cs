@@ -81,5 +81,7 @@ public partial class PaperView : System.Web.UI.Page
             list_ratings.SelectedValue,
             public_comment.Text.ToString(), 
             private_comment.Text.ToString());
+            public_comment.Text = ""; 
+            private_comment.Text = "";
     }
 }
