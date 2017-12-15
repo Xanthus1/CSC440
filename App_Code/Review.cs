@@ -164,9 +164,8 @@ public class Review
     public static void setReviewsByConf(int confID)
     {
         List<Paper> paperList = Paper.getPapersByConf(confID);
-        Debug.WriteLine(paperList.Count);
         List<Bid> bidList = new List<Bid>();
-        Debug.WriteLine(bidList.Count);
+
         foreach (Paper p in paperList)
         {
             List<Bid> tmpBidList = Bid.getBidByPaper(p.getID());
@@ -186,11 +185,12 @@ public class Review
                             if ((getReviewCountForReviewer(b.getReviewerID()) < 7) && (getReviewCountForPaper(b.getPaperID()) < 3))
                             {
                                 addReview(b.getPaperID(), b.getReviewerID());
+                                Bid.deleteBid(b.getID());
                             }
                         }
                         if (i == -1)
                         {
-                            //Bid.deleteBid(b.getID());
+                            Bid.deleteBid(b.getID());
                         }
                     }
                 }
