@@ -19,19 +19,24 @@
             <asp:Label ID="lbl_status" runat="server" Text="Status: "></asp:Label>
         </p>
         <p style="text-align: center">
+            <asp:Button ID="btn_checkin" runat="server" OnClick="btn_checkin_Click" Text="Check In" />
+        </p>
+        <p style="text-align: center">
             <asp:Button ID="btn_viewpapers" runat="server" OnClick="btn_viewpapers_Click" Text="View Papers" />
         </p>
         <p style="text-align: center">
         <asp:Button ID="btn_viewpaper" runat="server" OnClick="btn_viewpaper_Click" Text="View Paper and Comments" />
         </p>
         <p style="text-align: center">
-            <asp:Button ID="btn_checkin" runat="server" OnClick="btn_checkin_Click" Text="Check In" />
-        </p>
-        <p style="text-align: center">
             <asp:Button ID="btn_register_researcher" runat="server" OnClick="btn_register_Click" Text="Register As Researcher" Width="175px" />
         </p>
         <p style="text-align: center">
             <asp:Button ID="btn_register_reviewer" runat="server" OnClick="btn_register_Click" Text="Register As Reviewer" Width="175px" />
+        </p>
+        <p style="text-align: center">
+            <strong>
+            <asp:Label ID="lbl_paperSubmittal" runat="server" Text="-- Paper Submittal --" style="text-decoration: underline"></asp:Label>
+            </strong>
         </p>
         <p style="text-align: center">
             <asp:FileUpload id="FileUploadControl" runat="server" Width="249px" />
