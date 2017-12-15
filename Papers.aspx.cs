@@ -173,12 +173,6 @@ public partial class Papers : System.Web.UI.Page
             i++;
         }
     }
-
-    protected void getPapersReviews()
-    {
-        //todo: this
-    }
-
     protected void getPapersBids()
     {   
         paperList = new List<Paper>();

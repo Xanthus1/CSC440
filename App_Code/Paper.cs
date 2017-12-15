@@ -98,7 +98,7 @@ public class Paper
     {
         Paper p;
 
-
+        //get paper where paperID =
         DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM papers WHERE id=" + paperID,
             "root", "");
 
@@ -119,7 +119,7 @@ public class Paper
     {
         List<Paper> p = new List<Paper>();
 
-
+        //get all papers where confID =
         DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM papers WHERE confid=" + confID,
             "root", "");
 
@@ -141,7 +141,7 @@ public class Paper
     {
         Paper p = new Paper();
 
-
+        //get all papers where confID = and where userID=
         DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM papers WHERE confid=" + confID +" AND AuthorID = "+ userID,
             "root", "");
 

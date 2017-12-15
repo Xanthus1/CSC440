@@ -75,6 +75,7 @@ public partial class PaperView : System.Web.UI.Page
         Response.End();
     }
 
+    //submit review, will replace previous one if it has already been reviewd.
     protected void Button2_Click(object sender, EventArgs e)
     {
         Review.submitReview(review.getID(),

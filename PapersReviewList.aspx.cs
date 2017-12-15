@@ -237,30 +237,7 @@ public partial class Papers : System.Web.UI.Page
     // assign reviews to the bids
     protected void btnAssignReview_Click(object sender, EventArgs e)
     {
-        // changes phase to review phase
+        // changes phase to review phase and sets all bids to reviewers
         conference.startReviewPhase();
-
-        // todo: Andrew assign reviews to the bids
-        // Each review can only have up to 3 reviews
-        // each reviewer can only have 7 papers to review
-
-        // Dumb (but easy) algorithm for assigning papers
-        // get a list of all the papers and bids
-        // for each paper, select the top 3 bids (select ~all bids for a paper~ ORDER BY rating DESC LIMIT 3)
-        
-        // delete all other bids for that paper (everybody else lost the bid)
-        
-        // add records in the review table , linking this paper to the awarded reviewers
-        // this will represent that these reviewers have access to review this paper
-        // On a conferencedetails page, they will have a button to review papers
-        // the "PaperReviewList" will use these new records to populate a table (should only have up to
-        // 7 results)
-
-        // see if those reviewers have reached their 7 paper limit
-        //   if they have, then remove all their other bids (don't let them get any more papers)
-        // this wont be the best way to ensure equal distribution, but will satisfy the condition
-        // it's possible for some to not get reviewed
-
-
     }
 }

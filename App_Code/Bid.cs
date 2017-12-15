@@ -91,10 +91,12 @@ public class Bid
     public static List<Bid> getBidByPaper(int paperID)
     {
         List<Bid> bidList = new List<Bid>();
-        Debug.WriteLine("initial bidlist count ="+bidList.Count);
+       
+        //new bid list where paperid =
         DataTable myTable = DBHelper.dataTableFromQuery("SELECT * FROM bid WHERE paperid=" + paperID,
             "root", "");
-        Debug.WriteLine("mytable count =" + myTable.Rows.Count);
+
+        //add all those matching bids to the bidList
         foreach (DataRow row in myTable.Rows)
         {
             bidList.Add(new Bid(Int32.Parse(row["ID"].ToString()),
