@@ -10,7 +10,6 @@ public class Alerts
 {
     private int id;
     private int userID; 
-    private int accessLevel;
     private Boolean viewed;
     public Alerts(int id, int userID, int accessLevel, Boolean viewed)
     {
@@ -34,10 +33,6 @@ public class Alerts
     public int getUserID()
     {
         return userID;
-    }
-    public int getAccessLevel()
-    {
-        return accessLevel;
     }
     public Boolean getViewed()
     {
