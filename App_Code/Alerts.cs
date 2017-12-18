@@ -15,14 +15,12 @@ public class Alerts
     {
         this.id = id;
         this.userID = userID;
-        this.accessLevel = accessLevel;
         this.viewed = viewed;
     }
     public Alerts()
     {
         this.id = -1;
         this.userID = -1;
-        this.accessLevel = -1;
         this.viewed = false;
     }
 
